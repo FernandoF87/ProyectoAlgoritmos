@@ -13,13 +13,17 @@ import java.awt.event.KeyListener;
  */
 public class MainFrame extends javax.swing.JFrame {
 
+    private int caretPosition;
+    private byte toDelete;
+    
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -41,6 +45,11 @@ public class MainFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Calculadora");
 
+        tfInput.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                tfInputCaretUpdate(evt);
+            }
+        });
         tfInput.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 tfInputKeyTyped(evt);
@@ -48,16 +57,46 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         btCos.setText("cos(");
+        btCos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCosActionPerformed(evt);
+            }
+        });
 
         btSen.setText("sen(");
+        btSen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSenActionPerformed(evt);
+            }
+        });
 
         btTan.setText("tan(");
+        btTan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btTanActionPerformed(evt);
+            }
+        });
 
         btSqrt.setText("sqrt(");
+        btSqrt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSqrtActionPerformed(evt);
+            }
+        });
 
         btFacto.setText("Factorial");
+        btFacto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btFactoActionPerformed(evt);
+            }
+        });
 
         btCalculate.setText("Calcular");
+        btCalculate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCalculateActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -107,19 +146,266 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tfInputKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfInputKeyTyped
-        
+    private void tfInputCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tfInputCaretUpdate
+        // TODO add your handling code here:
         if (!tfInput.getText().isEmpty()) {
+            
             if (tfInput.getText().charAt(tfInput.getCaretPosition() - 1) == '(') {
-                if (evt.getKeyCode() == 0) {
-                    System.out.println("funciona");
+                caretPosition = tfInput.getCaretPosition() - 1;
+                String text = "";
+                for (int i = tfInput.getCaretPosition() - 1; i >= tfInput.getCaretPosition() - 4; i--) {
+                    text = tfInput.getText().charAt(i) + text;
                 }
+                System.out.println("text=" + text);
+                switch (text) {
+                    case "cos(":
+                    case "sen(":
+                    case "tan(":
+                        toDelete = 3;
+                        break;
+                    case "qrt(":
+                        toDelete = 4;
+                        break;
+                    default:
+                        toDelete = -1;
+                }
+            } else {
+                caretPosition = -1;
             }
         }
+    }//GEN-LAST:event_tfInputCaretUpdate
 
-        
+    private void tfInputKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfInputKeyTyped
+        // TODO add your handling code here:
+        if (evt.getKeyChar() == 8 && toDelete != -1) {
+            System.out.println("Delete");
+            String newString = "";
+            for (int i = 0; i < tfInput.getText().length(); i++) {
+                if (i < tfInput.getCaretPosition() - toDelete || i >= tfInput.getCaretPosition()) {
+                    newString += tfInput.getText().charAt(i);
+                }
+            }
+            tfInput.setText(newString);
+            toDelete = -1;
+        }
     }//GEN-LAST:event_tfInputKeyTyped
 
+    private void btCosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCosActionPerformed
+        // TODO add your handling code here:
+        final String COS_TEXT = "cos(";
+        String inputText = tfInput.getText();
+        String firstPart = inputText.substring(0, tfInput.getCaretPosition());
+        String secondPart = inputText.substring(tfInput.getCaretPosition());
+        tfInput.setText(firstPart + COS_TEXT + secondPart);
+       
+    }//GEN-LAST:event_btCosActionPerformed
+
+    private void btSenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSenActionPerformed
+        // TODO add your handling code here:
+        final String SEN_TEXT = "sen(";
+        String inputText = tfInput.getText();
+        String firstPart = inputText.substring(0, tfInput.getCaretPosition());
+        String secondPart = inputText.substring(tfInput.getCaretPosition());
+        tfInput.setText(firstPart + SEN_TEXT + secondPart);
+    }//GEN-LAST:event_btSenActionPerformed
+
+    private void btTanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btTanActionPerformed
+        // TODO add your handling code here:
+        final String TAN_TEXT = "tan(";
+        String inputText = tfInput.getText();
+        String firstPart = inputText.substring(0, tfInput.getCaretPosition());
+        String secondPart = inputText.substring(tfInput.getCaretPosition());
+        tfInput.setText(firstPart + TAN_TEXT + secondPart);
+    }//GEN-LAST:event_btTanActionPerformed
+
+    private void btSqrtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSqrtActionPerformed
+        // TODO add your handling code here:
+        final String SQRT_TEXT = "sqrt(";
+        String inputText = tfInput.getText();
+        String firstPart = inputText.substring(0, tfInput.getCaretPosition());
+        String secondPart = inputText.substring(tfInput.getCaretPosition());
+        tfInput.setText(firstPart + SQRT_TEXT + secondPart);
+    }//GEN-LAST:event_btSqrtActionPerformed
+
+    private void btFactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btFactoActionPerformed
+        // TODO add your handling code here:
+        final char FACTO_SYMBOL = '!';
+        String inputText = tfInput.getText();
+        String firstPart = inputText.substring(0, tfInput.getCaretPosition());
+        String secondPart = inputText.substring(tfInput.getCaretPosition());
+        tfInput.setText(firstPart + FACTO_SYMBOL + secondPart);
+    }//GEN-LAST:event_btFactoActionPerformed
+
+    private void btCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCalculateActionPerformed
+        // TODO add your handling code here:
+        String formule = tfInput.getText();
+        if (VerifyFormule.checkString(formule)) {
+            DataInterface[] data = transformData(formule);
+            if (isValidFormule(data) != null) {
+                
+            }
+        } else {
+            MessageDialog.showMessageDialog(this, "La fórmula dada no está balanciada, verifiquela", "Error");
+        }
+        
+    }//GEN-LAST:event_btCalculateActionPerformed
+
+    private DataInterface[] transformData(String formule) {
+        DataInterface[] data = new DataInterface[formule.length()];
+        final String[] FUNCTIONS_TEXT = {"cos(", "sen(", "tan(", "sqrt("};
+        for (int i = 0; i < data.length; i++) {
+            String temp = "";
+            char value = formule.charAt(i);
+            switch (value) {
+                case 'c':
+                case 's':
+                case 't':
+                    temp = formule.substring(i, i + 5);
+                    for (int j = 0; j < FUNCTIONS_TEXT.length; j++) {
+                        if (temp.contains(FUNCTIONS_TEXT[j])) {
+                            data[i] = new Operator(FUNCTIONS_TEXT[j], DataInterface.MAX_PRIORITY);
+                            i += FUNCTIONS_TEXT[j].length() - 1;
+                            break;
+                        }
+                    }
+                    break;
+                case '^':
+                case '!':
+                    data[i] = new Operator(Character.toString(value), DataInterface.MAX_PRIORITY);
+                    break;
+                case '*':
+                case '/':
+                    data[i] = new Operator(Character.toString(value), DataInterface.MIDDLE_PRIORITY);
+                    break;
+                case '+':
+                case '-':
+                    data[i] = new Operator(Character.toString(value), DataInterface.LOW_PRIORITY);
+                    break;
+                case '[':
+                case ']':
+                case '(':
+                case ')':
+                case '{':
+                case '}':
+                    data[i] = new Operator(Character.toString(value), DataInterface.NO_PRIORITY);
+                    break;
+                case ' ':
+                    //Do nothing
+                    break;
+                default:
+                    if (Character.isDigit(value)) {
+                        char digit = value;
+                        byte count = 0;
+                        while (Character.isDigit(digit)) {
+                            temp += digit;
+                            count++;
+                            if (i + count < formule.length())
+                                digit = formule.charAt(i + count);
+                            else
+                                break;
+                        }
+                        i += count - 1;
+                        data[i] = new Value(temp, DataInterface.VALUE_PRIORITY);
+                    } else {
+                        data[i] = new Value(Character.toString(value), DataInterface.VALUE_PRIORITY);
+                    }
+                    break;
+            }
+        }
+        int count = 0;
+        int x = 0;
+        //Counts the number of not null elements in the array.
+        if (data.length > 1) {
+            while (data[x] != null && count < data.length) {
+                count++;
+                x++;
+        }
+        DataInterface[] temp = new DataInterface[count];
+        for (int i = 0, j = 0; i < data.length && j < count; i++) {
+            if (data[i] != null) {
+                temp[j] = data[i];
+                j++;
+            }
+        }
+        return temp;
+        } else {
+            return data;
+        }
+        
+    }
+    
+    private String isValidFormule(DataInterface[] data) {
+        String errors = "";
+        for (int i = 0; i < data.length; i++) {
+            switch (data[i].getPriority()) {
+                case DataInterface.MAX_PRIORITY:
+                    if (i == 0) {
+                        if (data[i].getData().equals("!") || data[i].getData().equals("^")) {
+                            errors += "Factorial o potencia al inicio sin número antes\n";
+                        }
+                        
+                    } else if (i == data.length - 1 && !data[i].getData().equals("!")) {
+                        errors += "Operador con parametro obligatorio al final sin este\n";
+                    } else if (!data[i].getData().equals("!") && !data[i].getData().equals("^")) {
+                        if (data[i + 1].getPriority() == DataInterface.MIDDLE_PRIORITY || data[i + 1].getPriority() == DataInterface.LOW_PRIORITY) {
+                            errors += "No puede haber suma después de un parentesis o similar de apertura\n";
+                        }
+                    }
+                    break;
+                case DataInterface.MIDDLE_PRIORITY:
+                case DataInterface.LOW_PRIORITY:
+                    break;
+            }
+        }
+        System.out.println(errors);
+        return (errors.isEmpty()) ? null : errors;
+        
+//        for (int i = 0; i < data.length; i++) {
+//            switch (data[i].getPriority()) {
+//                case DataInterface.MAX_PRIORITY -> {
+//                    if (data[i].getData().equals("^") && (i == data.length - 1)) {
+//                        return false;
+//                    } else if (data[i].getData().equals("^") && ((data[i + 1].getPriority() != DataInterface.VALUE_PRIORITY) &&
+//                            (data[i + 1].getPriority() != DataInterface.LOW_PRIORITY))) {
+//                        return false;
+//                    } else if (data[i].getData().equals('!') || data[i].getData().equals('^')) {
+//                        if (i == 0) {
+//                            return false;
+//                        } else if (data[i - 1].getPriority() != DataInterface.VALUE_PRIORITY) {
+//                            return false;
+//                        }
+//                    } else if (data[i + 1].getPriority() != DataInterface.VALUE_PRIORITY) {
+//                        return false;
+//                    }
+//                }
+//                case DataInterface.MIDDLE_PRIORITY | DataInterface.LOW_PRIORITY -> {
+//                    if (i == 0 || i == (data.length - 1)) {
+//                        return false;
+//                    } 
+//                    if (data[i].getData().equals("/") && data[i + 1].getData().equals("0")) {
+//                        return false;
+//                    }
+//                }
+//                case DataInterface.VALUE_PRIORITY -> {
+//                    if (data.length == 1)
+//                        return true;
+//                    if (i == 0) {
+//                        if (data[i + 1].getPriority() != DataInterface.MIDDLE_PRIORITY && data[i + 1].getPriority() != DataInterface.LOW_PRIORITY) {
+//                            return false;
+//                        }
+//                    } else if (i == data.length - 1) {
+//                        if (data[i - 1].getPriority() != DataInterface.MIDDLE_PRIORITY && data[i - 1].getPriority() != DataInterface.LOW_PRIORITY) {
+//                            return false;
+//                        }
+//                    }
+//                    
+//                    
+//                    
+//            }
+//        }
+        //return false;
+    }
+    
     /**
      * @param args the command line arguments
      */

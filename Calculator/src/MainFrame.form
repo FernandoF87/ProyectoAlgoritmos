@@ -80,6 +80,7 @@
   <SubComponents>
     <Component class="javax.swing.JTextField" name="tfInput">
       <Events>
+        <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="tfInputCaretUpdate"/>
         <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfInputKeyTyped"/>
       </Events>
     </Component>
@@ -89,31 +90,49 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="cos("/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btCosActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btSen">
       <Properties>
         <Property name="text" type="java.lang.String" value="sen("/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btSenActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btTan">
       <Properties>
         <Property name="text" type="java.lang.String" value="tan("/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btTanActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btSqrt">
       <Properties>
         <Property name="text" type="java.lang.String" value="sqrt("/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btSqrtActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btFacto">
       <Properties>
         <Property name="text" type="java.lang.String" value="Factorial"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btFactoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btCalculate">
       <Properties>
         <Property name="text" type="java.lang.String" value="Calcular"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btCalculateActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
