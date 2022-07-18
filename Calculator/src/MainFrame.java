@@ -238,10 +238,10 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCalculateActionPerformed
         // TODO add your handling code here:
-        String formule = tfInput.getText();
-        if (VerifyFormule.checkString(formule)) {
-            DataInterface[] data = transformData(formule);
-            if (isValidFormule(data) != null) {
+        String formula = tfInput.getText();
+        if (VerifyFormula.checkString(formula)) {
+            DataInterface[] data = transformData(formula);
+            if (isValidFormula(data) != null) {
                 
             }
         } else {
@@ -250,17 +250,17 @@ public class MainFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btCalculateActionPerformed
 
-    private DataInterface[] transformData(String formule) {
-        DataInterface[] data = new DataInterface[formule.length()];
+    private DataInterface[] transformData(String formula) {
+        DataInterface[] data = new DataInterface[formula.length()];
         final String[] FUNCTIONS_TEXT = {"cos(", "sen(", "tan(", "sqrt("};
         for (int i = 0; i < data.length; i++) {
             String temp = "";
-            char value = formule.charAt(i);
+            char value = formula.charAt(i);
             switch (value) {
                 case 'c':
                 case 's':
                 case 't':
-                    temp = formule.substring(i, i + 5);
+                    temp = formula.substring(i, i + 5);
                     for (int j = 0; j < FUNCTIONS_TEXT.length; j++) {
                         if (temp.contains(FUNCTIONS_TEXT[j])) {
                             data[i] = new Operator(FUNCTIONS_TEXT[j], DataInterface.MAX_PRIORITY);
@@ -299,8 +299,8 @@ public class MainFrame extends javax.swing.JFrame {
                         while (Character.isDigit(digit)) {
                             temp += digit;
                             count++;
-                            if (i + count < formule.length())
-                                digit = formule.charAt(i + count);
+                            if (i + count < formula.length())
+                                digit = formula.charAt(i + count);
                             else
                                 break;
                         }
@@ -334,7 +334,7 @@ public class MainFrame extends javax.swing.JFrame {
         
     }
     
-    private String isValidFormule(DataInterface[] data) {
+    private String isValidFormula(DataInterface[] data) {
         String errors = "";
         for (int i = 0; i < data.length; i++) {
             switch (data[i].getPriority()) {

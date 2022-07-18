@@ -10,14 +10,14 @@ import java.util.EmptyStackException;
  * @version
  * @author Jostin Castro
  */
-public class VerifyFormule {
+public class VerifyFormula {
     
-    public static boolean checkString(String formule) {
-        if (formule == null || formule.isBlank()) {
+    public static boolean checkString(String formula) {
+        if (formula == null || formula.isBlank()) {
             return true;
         }
         Stack stack = new Stack();
-        char[] array = formule.toCharArray();
+        char[] array = formula.toCharArray();
         for (int i = 0; i < array.length; i++) {
             switch (array[i]) {
             case '{':

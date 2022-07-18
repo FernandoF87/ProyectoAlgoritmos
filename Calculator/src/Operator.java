@@ -13,8 +13,16 @@ public class Operator implements DataInterface {
     private int priority;
     private String data;
 
-    public Operator() {
-        
+    public Operator(String data) {
+        this.data = data;
+        if (data.equals("+")|| data.equals("-"))
+            priority = 1;
+        else if (data.equals("*")|| data.equals("/"))
+            priority = 2;
+        else if (data.equals("$") || data.equals("%") || data.equals("#") || data.equals("&") || data.equals("!"))
+            priority = 3;
+        else
+            priority = 0;
     }
     
     public Operator(String data, int priority) {
