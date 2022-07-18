@@ -1,9 +1,10 @@
+
 /**
  *
  * @author Fernando Flores Moya
  */
 public class ReversePolish {
-    
+
     public static Queue reversePolish(DataInterface[] formula) {
         Queue originalFormula = new Queue();
         for (int i = 0; i < formula.length; i++) {
@@ -11,7 +12,7 @@ public class ReversePolish {
         }
         Queue reversePolishQueue = new Queue();
         Stack helper = new Stack();
-        
+
         while (!originalFormula.empty()) {
             try {
                 String expression = originalFormula.dequeue();
@@ -26,8 +27,9 @@ public class ReversePolish {
                         Operator top = new Operator(helper.peek());
                         while (top.getPriority() > current.getPriority()) {
                             reversePolishQueue.enqueue(helper.pop());
-                            if (helper.empty())
+                            if (helper.empty()) {
                                 break;
+                            }
                             top = new Operator(helper.peek());
                         }
                         helper.push(expression);
@@ -35,12 +37,15 @@ public class ReversePolish {
                 } else if (expression.equals(")") || expression.equals("]") || expression.equals("}")) {
                     String current = helper.pop();
                     String target = "";
-                    if (expression.equals(")"))
+                    if (expression.equals(")")) {
                         target = "(";
-                    if (expression.equals("]"))
+                    }
+                    if (expression.equals("]")) {
                         target = "[";
-                    if (expression.equals("}"))
+                    }
+                    if (expression.equals("}")) {
                         target = "{";
+                    }
                     while (!current.equals(target)) {
                         reversePolishQueue.enqueue(current);
                         current = helper.pop();
@@ -51,12 +56,13 @@ public class ReversePolish {
             } catch (EmptyQueueException ex) {
             }
         }
-        
-        while (!helper.empty())
-                    reversePolishQueue.enqueue(helper.pop());
+
+        while (!helper.empty()) {
+            reversePolishQueue.enqueue(helper.pop());
+        }
         return reversePolishQueue;
     }
-    
+
     public static void main(String[] args) {
         DataInterface[] formula = new DataInterface[19];
         formula[0] = new Operator("(");
@@ -80,7 +86,7 @@ public class ReversePolish {
         formula[18] = new Operator(")");
         Queue queue = reversePolish(formula);
         for (DataInterface i : formula) {
-            System.out.print(i.getData()+ " ");
+            System.out.print(i.getData() + " ");
         }
         System.out.println("");
         while (!queue.empty()) {
