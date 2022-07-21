@@ -65,21 +65,15 @@ public class ReversePolish {
     public static void main(String[] args) {
         Queue formula = new Queue();
         formula.enqueue("(");
-        formula.enqueue("A");
-        formula.enqueue("+");
-        formula.enqueue("B");
-        formula.enqueue(")");
-        formula.enqueue("*");
-        formula.enqueue("C");
-        formula.enqueue("-");
-        formula.enqueue("$");
-        formula.enqueue("(");
         formula.enqueue("4");
+        formula.enqueue("+");
+        formula.enqueue("3");
         formula.enqueue(")");
+        formula.enqueue("!");
         System.out.println(formula.printAll());
         Queue queue = reversePolish(formula);
         System.out.println(queue.printAll());
-        String[][] variables = {{"A", "B", "C"}, {"2", "3", "4"}};
+        String[][] variables = {{"A", "B", "C"}, {"1", "2", "4"}};
         try {
             System.out.println(Evaluate.evaluate(queue, variables));
         } catch (InvalidFormulaException ex) {

@@ -35,7 +35,7 @@ public class Evaluate {
                             break;
                     }
                     stack.push(z + "");
-                } else if (data.equals("$") || data.equals("%") || data.equals("&") || data.equals("#")) {
+                } else if (data.equals("$") || data.equals("%") || data.equals("&") || data.equals("#") || data.equals("!")) {
                     double x = Double.parseDouble(stack.pop());
                     double z = 0;
                     switch (data) {
@@ -51,6 +51,10 @@ public class Evaluate {
                         case "&":
                             z = Math.tan(x);
                             break;
+                        case "!":
+                            if (x - (int)x != 0)
+                                throw new InvalidFormulaException("Error de syntaxis");
+                            z = factorial((int)x);
                     }
                     stack.push(z + "");
                 } else {
@@ -71,5 +75,14 @@ public class Evaluate {
         }
 
         return Double.parseDouble(stack.pop());
+    }
+    
+    public static int factorial(int num) {
+        int result = 1;
+        while (num > 0) {
+            result *= num;
+            num--;
+        }
+        return result;
     }
 }
