@@ -252,12 +252,9 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         String formula = tfInput.getText();
         if (VerifyFormula.checkString(formula)) {
-            FormulaData[] data = transformData(formula);
-            String temp = isValidFormula(data);
-            if (temp != null) {
-                lbError.setText(temp);
-            } else {
-                assignedValues(data);
+            Queue data = transformData(formula);
+            if (data != null) {
+                
             }
         } else {
             lbError.setText("La fórmula dada no está balanciada");
@@ -286,9 +283,9 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }
 
-    private FormulaData[] transformData(String formula) {
+    private Queue transformData(String formula) {
         FormulaData[] data = new FormulaData[formula.length()];
-        final String[] FUNCTIONS_TEXT = {"cos(", "sen(", "tan(", "sqrt("};
+        final String[] FUNCTIONS_TEXT = {"cos", "sen", "tan", "sqrt"};
         for (int i = 0; i < data.length; i++) {
             String temp = "";
             char value = formula.charAt(i);
@@ -349,109 +346,26 @@ public class MainFrame extends javax.swing.JFrame {
                     break;
             }
         }
-        int count = 0;
-        int x = 0;
-        //Counts the number of not null elements in the array.
+        
         if (data.length > 1) {
-            while (x < data.length) {
-                if (data[x] != null) {
-                    count++;
-                }
-                x++;
-            }
-            FormulaData[] temp = new FormulaData[count];
-            for (int i = 0, j = 0; i < data.length && j < count; i++) {
+            Queue temp = new Queue();
+            
+            for (int i = 0; i < data.length; i++) {
                 if (data[i] != null) {
-                    temp[j] = data[i];
-                    j++;
+                    temp.enqueue(data[i].getData());
                 }
             }
             return temp;
         } else {
-            return data;
-        }
-
-    }
-
-    private String isValidFormula(FormulaData[] data) {
-        String errors = "";
-        if (data.length > 1) {
-            for (int i = 0; i < data.length - 1; i++) {
-                String temp;
-                switch (data[i].getPriority()) {
-                    case FormulaData.MAX_PRIORITY:
-                        if (i == 0) {
-                            if (data[i].getData().equals("!") || data[i].getData().equals("^")) {
-                                errors += "Factorial o potencia al inicio sin número antes\n";
-                            }
-
-                        }
-                        if (i == data.length - 1 && !data[i].getData().equals("!")) {
-                            errors += "Operador con parametro obligatorio al final sin este\n";
-                        }
-                        if (i != data.length - 1) {
-                            if (!data[i].getData().equals("!") && !data[i].getData().equals("^")) {
-                                //If is cos(, sen( or tan( and there is a *, /, + or - in the next position:
-                                if (data[i + 1].getPriority() == FormulaData.MIDDLE_PRIORITY || data[i + 1].getPriority() == FormulaData.LOW_PRIORITY) {
-                                    errors += "No puede haber suma o resta inmediatamente después de un parentesis o simbolo de apertura\n";
-                                } else if (data[i + 1].getPriority() == FormulaData.NO_PRIORITY) {
-                                    if (data[i + 1].getConvertedValue() == ')' || data[i + 1].getConvertedValue() == ']' || data[i + 1].getConvertedValue() == '}') {
-                                        errors += "No hay parametros en la función coseno, seno, o tangente\n";
-                                    }
-                                }
-                            }
-                        }
-
-                        break;
-                    case FormulaData.MIDDLE_PRIORITY:
-                    case FormulaData.LOW_PRIORITY:
-                        if (i == 0) {
-                            errors += "Multiplicación, división, suma o resta al inicio";
-                        }
-                        if (i == data.length - 1) {
-                            errors += "Multiplicación, división, suma o resta al final sin valor al que realizar la operación";
-                        }
-                        break;
-                    case FormulaData.VALUE_PRIORITY:
-                        temp = data[i + 1].getData();
-                        if (temp.equals("cos(") || temp.equals("tan(") || temp.equals("sen(")) {
-                            errors += "Valor sin signo que permita operar el coseno, tangente o seno";
-                        }
-                        if (data[i + 1].getPriority() == FormulaData.NO_PRIORITY) {
-                            if (temp.equals("{") || temp.equals("[") || temp.equals("(")) {
-                                errors += "No hay operador entre el valor y el parentesis o simbolo de apertura";
-                            }
-                        }
-                        break;
-                    case FormulaData.NO_PRIORITY:
-                        temp = data[i].getData();
-                        if (temp.equals("{") || temp.equals("[") || temp.equals("(")) {
-                            if (data[i + 1].getPriority() != FormulaData.VALUE_PRIORITY || data[i + 1].getPriority() != FormulaData.NO_PRIORITY) {
-                                temp = data[i + 1].getData();
-                                if (!(temp.equals("cos(") || temp.equals("tan(") || temp.equals("sen("))) {
-                                    errors += "Operador seguido de un parentesis o simbolo de apertura";
-                                }
-                            }
-
-                        }
-
-                }
-                return (errors.isEmpty()) ? null : errors;
-            }
-        } else {
-            if (data.length == 0) {
-                return null;
+            if (data.length == 1 && data[0] != null) {
+                Queue temp = new Queue();
+                temp.enqueue(data[0].getData());
+                return temp;
             } else {
-                if (data[0] != null) {
-                    if (data[0].getPriority() != FormulaData.VALUE_PRIORITY) {
-                        return "No es una formula válida";
-                    }
-                } else {
-                    return null;
-                }
+                return null;
             }
         }
-        return null;
+
     }
 
     /**

@@ -5,17 +5,13 @@
  */
 public class ReversePolish {
 
-    public static Queue reversePolish(FormulaData[] formula) {
-        Queue originalFormula = new Queue();
-        for (int i = 0; i < formula.length; i++) {
-            originalFormula.enqueue(formula[i].getData());
-        }
+    public static Queue reversePolish(Queue formula) {
         Queue reversePolishQueue = new Queue();
         Stack helper = new Stack();
 
-        while (!originalFormula.empty()) {
+        while (!formula.empty()) {
             try {
-                String expression = originalFormula.dequeue();
+                String expression = formula.dequeue();
                 if (expression.equals("(") || expression.equals("[") || expression.equals("{")) {
                     helper.push(expression);
                 } else if (expression.equals("+") || expression.equals("-") || expression.equals("*") || expression.equals("/") || expression.equals("^")
@@ -64,17 +60,13 @@ public class ReversePolish {
     }
 
     public static void main(String[] args) {
-        FormulaData[] formula = new FormulaData[5];
-        formula[0] = new FormulaData("4");
-        formula[1] = new FormulaData("*");
-        formula[2] = new FormulaData("3");
-        formula[3] = new FormulaData("/");
-        formula[4] = new FormulaData("2");
+        Queue formula = new Queue();
+        formula.enqueue("4");
+        formula.enqueue("*");
+        formula.enqueue("3");
+        formula.enqueue("/");
+        formula.enqueue("2");
         Queue queue = reversePolish(formula);
-        for (FormulaData i : formula) {
-            System.out.print(i.getData() + " ");
-        }
-        System.out.println("");
         while (!queue.empty()) {
             try {
                 System.out.print(queue.dequeue() + " ");

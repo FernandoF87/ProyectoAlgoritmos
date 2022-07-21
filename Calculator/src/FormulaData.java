@@ -19,22 +19,20 @@ public class FormulaData {
     
     private byte priority;
     private String data;
-    private char convertedValue;
 
     public FormulaData(String data) {
-        this.data = data;
         switch (data) {
-            case "sqrt(":
-                convertedValue = '$';
+        case "sqrt":
+                this.data = "$";
                 break;
-            case "cos(":
-                convertedValue = '%';
+            case "cos":
+                this.data = "%";
                 break;
-            case "sen(":
-                convertedValue = '#';
+            case "sen":
+                this.data = "#";
                 break;  
-            case "tan(":
-                convertedValue = '&';
+            case "tan":
+                this.data = "&";
                 break;
             case "^":;
             case "!":
@@ -48,34 +46,32 @@ public class FormulaData {
             case "]":
             case "(":
             case ")":
-                convertedValue = data.charAt(0);
-                break;
             default:
-                convertedValue = 'v';   //Represent a value data
+                this.data = data;
         }
-        switch (convertedValue) {
-            case '$':
-            case '%':
-            case '#':
-            case '&':
-            case '^':
-            case '!':
+        switch (this.data) {
+            case "$":
+            case "%":
+            case "#":
+            case "&":
+            case "^":
+            case "!":
                 priority = MAX_PRIORITY;
                 break;
-            case '*':
-            case '/':
+            case "*":
+            case "/":
                 priority = MIDDLE_PRIORITY;
                 break;
-            case '+':
-            case '-':
+            case "+":
+            case "-":
                 priority = LOW_PRIORITY;
                 break;
-            case '{':
-            case '}':
-            case '[':
-            case ']':
-            case '(':
-            case ')':
+            case "{":
+            case "}":
+            case "[":
+            case "]":
+            case "(":
+            case ")":
                 priority = NO_PRIORITY;
                 break;
             default:
@@ -95,10 +91,6 @@ public class FormulaData {
     public void setData(String data) {
         this.data = data;
     }
-    
-    public void setConvertedValue(char convertedValue) {
-        this.convertedValue = convertedValue;
-    }
 
     public int getPriority() {
         return priority;
@@ -106,10 +98,6 @@ public class FormulaData {
     
     public String getData() {
         return data;
-    }
-    
-    public char getConvertedValue() {
-        return convertedValue;
     }
 
 }
