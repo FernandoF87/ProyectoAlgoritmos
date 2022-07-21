@@ -6,7 +6,6 @@ import java.awt.event.KeyListener;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author Jostin Castro
@@ -15,7 +14,9 @@ public class MainFrame extends javax.swing.JFrame {
 
     private int caretPosition;
     private byte toDelete;
-    
+    private AssignedValueDialog assignedValue;
+    private ReversePolish polish;
+
     /**
      * Creates new form MainFrame
      */
@@ -23,7 +24,7 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,114 +34,123 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tfInput = new javax.swing.JTextField();
-        jSeparator1 = new javax.swing.JSeparator();
+        jPanel1 = new javax.swing.JPanel();
+        btSqrt = new javax.swing.JButton();
         btCos = new javax.swing.JButton();
         btSen = new javax.swing.JButton();
-        btTan = new javax.swing.JButton();
-        btSqrt = new javax.swing.JButton();
         btFacto = new javax.swing.JButton();
+        btTan = new javax.swing.JButton();
         btCalculate = new javax.swing.JButton();
+        tfInput = new javax.swing.JTextField();
+        jSeparator1 = new javax.swing.JSeparator();
+        lbError = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Calculadora");
+        setResizable(false);
 
-        tfInput.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                tfInputCaretUpdate(evt);
-            }
-        });
-        tfInput.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                tfInputKeyTyped(evt);
-            }
-        });
+        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel1.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btCos.setText("cos(");
-        btCos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btCosActionPerformed(evt);
-            }
-        });
-
-        btSen.setText("sen(");
-        btSen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btSenActionPerformed(evt);
-            }
-        });
-
-        btTan.setText("tan(");
-        btTan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btTanActionPerformed(evt);
-            }
-        });
-
+        btSqrt.setBackground(new java.awt.Color(153, 153, 255));
+        btSqrt.setFont(new java.awt.Font("Roboto Black", 0, 12)); // NOI18N
+        btSqrt.setForeground(new java.awt.Color(255, 255, 255));
         btSqrt.setText("sqrt(");
         btSqrt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btSqrtActionPerformed(evt);
             }
         });
+        jPanel1.add(btSqrt, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 90, -1));
 
+        btCos.setBackground(new java.awt.Color(153, 153, 255));
+        btCos.setFont(new java.awt.Font("Roboto Black", 0, 12)); // NOI18N
+        btCos.setForeground(new java.awt.Color(255, 255, 255));
+        btCos.setText("cos(");
+        btCos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCosActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btCos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 90, -1));
+
+        btSen.setBackground(new java.awt.Color(153, 153, 255));
+        btSen.setFont(new java.awt.Font("Roboto Black", 0, 12)); // NOI18N
+        btSen.setForeground(new java.awt.Color(255, 255, 255));
+        btSen.setText("sen(");
+        btSen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSenActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btSen, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 80, 90, -1));
+
+        btFacto.setBackground(new java.awt.Color(153, 153, 255));
+        btFacto.setFont(new java.awt.Font("Roboto Black", 0, 12)); // NOI18N
+        btFacto.setForeground(new java.awt.Color(255, 255, 255));
         btFacto.setText("Factorial");
         btFacto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btFactoActionPerformed(evt);
             }
         });
+        jPanel1.add(btFacto, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 120, 90, -1));
 
+        btTan.setBackground(new java.awt.Color(153, 153, 255));
+        btTan.setFont(new java.awt.Font("Roboto Black", 0, 12)); // NOI18N
+        btTan.setForeground(new java.awt.Color(255, 255, 255));
+        btTan.setText("tan(");
+        btTan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btTanActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btTan, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, 90, -1));
+
+        btCalculate.setBackground(new java.awt.Color(102, 255, 102));
+        btCalculate.setFont(new java.awt.Font("Roboto Black", 0, 12)); // NOI18N
+        btCalculate.setForeground(new java.awt.Color(255, 255, 255));
         btCalculate.setText("Calcular");
         btCalculate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btCalculateActionPerformed(evt);
             }
         });
+        jPanel1.add(btCalculate, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 120, 90, -1));
+
+        tfInput.setBackground(new java.awt.Color(255, 255, 255));
+        tfInput.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        tfInput.setForeground(new java.awt.Color(0, 0, 0));
+        tfInput.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                tfInputCaretUpdate(evt);
+            }
+        });
+        tfInput.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfInputKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfInputKeyTyped(evt);
+            }
+        });
+        jPanel1.add(tfInput, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 290, -1));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 290, 10));
+
+        lbError.setFont(new java.awt.Font("Roboto Medium", 0, 12)); // NOI18N
+        lbError.setForeground(new java.awt.Color(255, 0, 51));
+        jPanel1.add(lbError, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 45, 290, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(tfInput)
-                    .addComponent(jSeparator1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btCos)
-                            .addComponent(btSqrt))
-                        .addGap(64, 64, 64)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btFacto)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
-                                .addComponent(btCalculate))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btSen)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btTan)))))
-                .addContainerGap(33, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(tfInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btCos)
-                    .addComponent(btSen)
-                    .addComponent(btTan))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btSqrt)
-                    .addComponent(btFacto)
-                    .addComponent(btCalculate))
-                .addContainerGap(158, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
         );
 
         pack();
@@ -149,7 +159,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void tfInputCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tfInputCaretUpdate
         // TODO add your handling code here:
         if (!tfInput.getText().isEmpty() && tfInput.getCaretPosition() > 0) {
-            
+
             if (tfInput.getText().charAt(tfInput.getCaretPosition() - 1) == '(') {
                 caretPosition = tfInput.getCaretPosition() - 1;
                 String text = "";
@@ -199,7 +209,7 @@ public class MainFrame extends javax.swing.JFrame {
         String firstPart = inputText.substring(0, tfInput.getCaretPosition());
         String secondPart = inputText.substring(tfInput.getCaretPosition());
         tfInput.setText(firstPart + COS_TEXT + secondPart);
-       
+
     }//GEN-LAST:event_btCosActionPerformed
 
     private void btSenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSenActionPerformed
@@ -245,13 +255,36 @@ public class MainFrame extends javax.swing.JFrame {
             FormulaData[] data = transformData(formula);
             String temp = isValidFormula(data);
             if (temp != null) {
-                MessageDialog.showMessageDialog(this, temp, "Errores encontrados");
+                lbError.setText(temp);
+            } else {
+                assignedValues(data);
             }
         } else {
-            MessageDialog.showMessageDialog(this, "La fórmula dada no está balanciada, verifiquela", "Error");
+            lbError.setText("La fórmula dada no está balanciada");
         }
-        
+
     }//GEN-LAST:event_btCalculateActionPerformed
+
+    private void tfInputKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfInputKeyReleased
+        lbError.setText(null);
+    }//GEN-LAST:event_tfInputKeyReleased
+    private void assignedValues(FormulaData[] data) {
+        for (int i = 0; i < data.length; i++) {
+            if (data[i].getPriority() == FormulaData.VALUE_PRIORITY) {
+                if (data[i].getData().matches(("[A-Z]*"))) {
+                    String temp = data[i].getData();
+                    data[i].setData(assignedValue.showMessageDialog(this, data[i].getData()));
+                    for (int j = i; j < data.length; j++) {
+                        if (data[i].getPriority() == FormulaData.VALUE_PRIORITY) {
+                            if (data[j].getData().equals(temp)) {
+                                data[j].setData(data[i].getData());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     private FormulaData[] transformData(String formula) {
         FormulaData[] data = new FormulaData[formula.length()];
@@ -302,10 +335,11 @@ public class MainFrame extends javax.swing.JFrame {
                         while (Character.isDigit(digit) || value == '.') {
                             temp += digit;
                             count++;
-                            if (i + count < formula.length())
+                            if (i + count < formula.length()) {
                                 digit = formula.charAt(i + count);
-                            else
+                            } else {
                                 break;
+                            }
                         }
                         i += count - 1;
                         data[i] = new FormulaData(temp);
@@ -324,21 +358,21 @@ public class MainFrame extends javax.swing.JFrame {
                     count++;
                 }
                 x++;
-        }
-        FormulaData[] temp = new FormulaData[count];
-        for (int i = 0, j = 0; i < data.length && j < count; i++) {
-            if (data[i] != null) {
-                temp[j] = data[i];
-                j++;
             }
-        }
-        return temp;
+            FormulaData[] temp = new FormulaData[count];
+            for (int i = 0, j = 0; i < data.length && j < count; i++) {
+                if (data[i] != null) {
+                    temp[j] = data[i];
+                    j++;
+                }
+            }
+            return temp;
         } else {
             return data;
         }
-        
+
     }
-    
+
     private String isValidFormula(FormulaData[] data) {
         String errors = "";
         if (data.length > 1) {
@@ -412,14 +446,14 @@ public class MainFrame extends javax.swing.JFrame {
                     if (data[0].getPriority() != FormulaData.VALUE_PRIORITY) {
                         return "No es una formula válida";
                     }
-            } else {
-                return null;
-            }
+                } else {
+                    return null;
+                }
             }
         }
         return null;
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -462,7 +496,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btSen;
     private javax.swing.JButton btSqrt;
     private javax.swing.JButton btTan;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lbError;
     private javax.swing.JTextField tfInput;
     // End of variables declaration//GEN-END:variables
 }
