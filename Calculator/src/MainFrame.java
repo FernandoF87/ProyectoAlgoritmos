@@ -1,6 +1,7 @@
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.EmptyStackException;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -254,7 +255,20 @@ public class MainFrame extends javax.swing.JFrame {
         if (VerifyFormula.checkString(formula)) {
             Queue data = transformData(formula);
             if (data != null) {
-                
+                System.out.println(data.printAll());
+                Queue reversePolish = ReversePolish.reversePolish(data);
+                System.out.println(reversePolish.printAll());
+                if (VerifyFormula.validateSyntax(reversePolish.copy())) {
+                    try {
+                        System.out.println(Evaluate.evaluate(reversePolish, null));
+                    } catch (InvalidFormulaException ex) {
+                        System.out.println(ex.getMessage());
+                    } catch (EmptyStackException ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    System.out.println("Error de sintaxis");
+                }
             }
         } else {
             lbError.setText("La fórmula dada no está balanciada");
@@ -346,10 +360,10 @@ public class MainFrame extends javax.swing.JFrame {
                     break;
             }
         }
-        
+
         if (data.length > 1) {
             Queue temp = new Queue();
-            
+
             for (int i = 0; i < data.length; i++) {
                 if (data[i] != null) {
                     temp.enqueue(data[i].getData());

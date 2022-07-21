@@ -62,6 +62,27 @@ public class VerifyFormula {
         }
         return true;
     }
+    
+    public static boolean validateSyntax(Queue reversePolish) {
+        Stack stack = new Stack();
 
+        while (!reversePolish.empty()) {
+            try {
+                String data = reversePolish.dequeue();
+                if (data.equals("+") || data.equals("-") || data.equals("*") || data.equals("/") || data.equals("^")) {
+                    stack.push((stack.pop() + stack.pop()) + "");
+                } else if (data.equals("$") || data.equals("%") || data.equals("&") || data.equals("#") || data.equals("!")) {
+                    stack.push(stack.pop());
+                } else {
+                    stack.push("1");
+                }
+            } catch (EmptyQueueException ex) {
+            } catch (EmptyStackException ex) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
 

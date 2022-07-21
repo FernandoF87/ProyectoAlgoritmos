@@ -76,4 +76,12 @@ public class Queue {
         }
         return data;
     }
+    
+    public Queue copy() {
+        Queue copy = new Queue();
+        for (Node current = first; current != null; current = current.getNext()) {
+            copy.enqueue(current.getData());
+        }
+        return copy;
+    }
 }
