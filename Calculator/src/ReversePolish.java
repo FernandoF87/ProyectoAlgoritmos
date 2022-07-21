@@ -25,7 +25,7 @@ public class ReversePolish {
                     } else {
                         FormulaData current = new FormulaData(expression);
                         FormulaData top = new FormulaData(helper.peek());
-                        while (top.getPriority() > current.getPriority()) {
+                        while (top.getPriority() >= current.getPriority()) {
                             reversePolishQueue.enqueue(helper.pop());
                             if (helper.empty()) {
                                 break;
@@ -64,26 +64,12 @@ public class ReversePolish {
     }
 
     public static void main(String[] args) {
-        FormulaData[] formula = new FormulaData[19];
-        formula[0] = new FormulaData("(");
-        formula[1] = new FormulaData("(");
-        formula[2] = new FormulaData("x");
-        formula[3] = new FormulaData("+");
+        FormulaData[] formula = new FormulaData[5];
+        formula[0] = new FormulaData("4");
+        formula[1] = new FormulaData("*");
+        formula[2] = new FormulaData("3");
+        formula[3] = new FormulaData("/");
         formula[4] = new FormulaData("2");
-        formula[5] = new FormulaData("*");
-        formula[6] = new FormulaData("y");
-        formula[7] = new FormulaData(")");
-        formula[8] = new FormulaData("^");
-        formula[9] = new FormulaData("5");
-        formula[10] = new FormulaData(")");
-        formula[11] = new FormulaData("/");
-        formula[12] = new FormulaData("(");
-        formula[13] = new FormulaData("4");
-        formula[14] = new FormulaData("*");
-        formula[15] = new FormulaData("x");
-        formula[16] = new FormulaData("-");
-        formula[17] = new FormulaData("3");
-        formula[18] = new FormulaData(")");
         Queue queue = reversePolish(formula);
         for (FormulaData i : formula) {
             System.out.print(i.getData() + " ");
