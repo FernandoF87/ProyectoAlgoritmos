@@ -148,7 +148,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void tfInputCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tfInputCaretUpdate
         // TODO add your handling code here:
-        if (!tfInput.getText().isEmpty()) {
+        if (!tfInput.getText().isEmpty() && tfInput.getCaretPosition() > 0) {
             
             if (tfInput.getText().charAt(tfInput.getCaretPosition() - 1) == '(') {
                 caretPosition = tfInput.getCaretPosition() - 1;
@@ -172,6 +172,8 @@ public class MainFrame extends javax.swing.JFrame {
             } else {
                 caretPosition = -1;
             }
+        } else {
+            caretPosition = -1;
         }
     }//GEN-LAST:event_tfInputCaretUpdate
 
@@ -240,9 +242,10 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         String formula = tfInput.getText();
         if (VerifyFormula.checkString(formula)) {
-            DataInterface[] data = transformData(formula);
-            if (isValidFormula(data) != null) {
-                
+            FormulaData[] data = transformData(formula);
+            String temp = isValidFormula(data);
+            if (temp != null) {
+                MessageDialog.showMessageDialog(this, temp, "Errores encontrados");
             }
         } else {
             MessageDialog.showMessageDialog(this, "La fórmula dada no está balanciada, verifiquela", "Error");
@@ -250,8 +253,8 @@ public class MainFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btCalculateActionPerformed
 
-    private DataInterface[] transformData(String formula) {
-        DataInterface[] data = new DataInterface[formula.length()];
+    private FormulaData[] transformData(String formula) {
+        FormulaData[] data = new FormulaData[formula.length()];
         final String[] FUNCTIONS_TEXT = {"cos(", "sen(", "tan(", "sqrt("};
         for (int i = 0; i < data.length; i++) {
             String temp = "";
@@ -263,7 +266,7 @@ public class MainFrame extends javax.swing.JFrame {
                     temp = formula.substring(i, i + 5);
                     for (int j = 0; j < FUNCTIONS_TEXT.length; j++) {
                         if (temp.contains(FUNCTIONS_TEXT[j])) {
-                            data[i] = new Operator(FUNCTIONS_TEXT[j], DataInterface.MAX_PRIORITY);
+                            data[i] = new FormulaData(FUNCTIONS_TEXT[j]);
                             i += FUNCTIONS_TEXT[j].length() - 1;
                             break;
                         }
@@ -271,15 +274,15 @@ public class MainFrame extends javax.swing.JFrame {
                     break;
                 case '^':
                 case '!':
-                    data[i] = new Operator(Character.toString(value), DataInterface.MAX_PRIORITY);
+                    data[i] = new FormulaData(Character.toString(value));
                     break;
                 case '*':
                 case '/':
-                    data[i] = new Operator(Character.toString(value), DataInterface.MIDDLE_PRIORITY);
+                    data[i] = new FormulaData(Character.toString(value));
                     break;
                 case '+':
                 case '-':
-                    data[i] = new Operator(Character.toString(value), DataInterface.LOW_PRIORITY);
+                    data[i] = new FormulaData(Character.toString(value));
                     break;
                 case '[':
                 case ']':
@@ -287,7 +290,7 @@ public class MainFrame extends javax.swing.JFrame {
                 case ')':
                 case '{':
                 case '}':
-                    data[i] = new Operator(Character.toString(value), DataInterface.NO_PRIORITY);
+                    data[i] = new FormulaData(Character.toString(value));
                     break;
                 case ' ':
                     //Do nothing
@@ -296,7 +299,7 @@ public class MainFrame extends javax.swing.JFrame {
                     if (Character.isDigit(value)) {
                         char digit = value;
                         byte count = 0;
-                        while (Character.isDigit(digit)) {
+                        while (Character.isDigit(digit) || value == '.') {
                             temp += digit;
                             count++;
                             if (i + count < formula.length())
@@ -305,9 +308,9 @@ public class MainFrame extends javax.swing.JFrame {
                                 break;
                         }
                         i += count - 1;
-                        data[i] = new Value(temp, DataInterface.VALUE_PRIORITY);
+                        data[i] = new FormulaData(temp);
                     } else {
-                        data[i] = new Value(Character.toString(value), DataInterface.VALUE_PRIORITY);
+                        data[i] = new FormulaData(Character.toString(value));
                     }
                     break;
             }
@@ -316,11 +319,13 @@ public class MainFrame extends javax.swing.JFrame {
         int x = 0;
         //Counts the number of not null elements in the array.
         if (data.length > 1) {
-            while (data[x] != null && count < data.length) {
-                count++;
+            while (x < data.length) {
+                if (data[x] != null) {
+                    count++;
+                }
                 x++;
         }
-        DataInterface[] temp = new DataInterface[count];
+        FormulaData[] temp = new FormulaData[count];
         for (int i = 0, j = 0; i < data.length && j < count; i++) {
             if (data[i] != null) {
                 temp[j] = data[i];
@@ -334,76 +339,85 @@ public class MainFrame extends javax.swing.JFrame {
         
     }
     
-    private String isValidFormula(DataInterface[] data) {
+    private String isValidFormula(FormulaData[] data) {
         String errors = "";
-        for (int i = 0; i < data.length; i++) {
-            switch (data[i].getPriority()) {
-                case DataInterface.MAX_PRIORITY:
-                    if (i == 0) {
-                        if (data[i].getData().equals("!") || data[i].getData().equals("^")) {
-                            errors += "Factorial o potencia al inicio sin número antes\n";
+        if (data.length > 1) {
+            for (int i = 0; i < data.length - 1; i++) {
+                String temp;
+                switch (data[i].getPriority()) {
+                    case FormulaData.MAX_PRIORITY:
+                        if (i == 0) {
+                            if (data[i].getData().equals("!") || data[i].getData().equals("^")) {
+                                errors += "Factorial o potencia al inicio sin número antes\n";
+                            }
+
                         }
-                        
-                    } else if (i == data.length - 1 && !data[i].getData().equals("!")) {
-                        errors += "Operador con parametro obligatorio al final sin este\n";
-                    } else if (!data[i].getData().equals("!") && !data[i].getData().equals("^")) {
-                        if (data[i + 1].getPriority() == DataInterface.MIDDLE_PRIORITY || data[i + 1].getPriority() == DataInterface.LOW_PRIORITY) {
-                            errors += "No puede haber suma después de un parentesis o similar de apertura\n";
+                        if (i == data.length - 1 && !data[i].getData().equals("!")) {
+                            errors += "Operador con parametro obligatorio al final sin este\n";
                         }
+                        if (i != data.length - 1) {
+                            if (!data[i].getData().equals("!") && !data[i].getData().equals("^")) {
+                                //If is cos(, sen( or tan( and there is a *, /, + or - in the next position:
+                                if (data[i + 1].getPriority() == FormulaData.MIDDLE_PRIORITY || data[i + 1].getPriority() == FormulaData.LOW_PRIORITY) {
+                                    errors += "No puede haber suma o resta inmediatamente después de un parentesis o simbolo de apertura\n";
+                                } else if (data[i + 1].getPriority() == FormulaData.NO_PRIORITY) {
+                                    if (data[i + 1].getConvertedValue() == ')' || data[i + 1].getConvertedValue() == ']' || data[i + 1].getConvertedValue() == '}') {
+                                        errors += "No hay parametros en la función coseno, seno, o tangente\n";
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+                    case FormulaData.MIDDLE_PRIORITY:
+                    case FormulaData.LOW_PRIORITY:
+                        if (i == 0) {
+                            errors += "Multiplicación, división, suma o resta al inicio";
+                        }
+                        if (i == data.length - 1) {
+                            errors += "Multiplicación, división, suma o resta al final sin valor al que realizar la operación";
+                        }
+                        break;
+                    case FormulaData.VALUE_PRIORITY:
+                        temp = data[i + 1].getData();
+                        if (temp.equals("cos(") || temp.equals("tan(") || temp.equals("sen(")) {
+                            errors += "Valor sin signo que permita operar el coseno, tangente o seno";
+                        }
+                        if (data[i + 1].getPriority() == FormulaData.NO_PRIORITY) {
+                            if (temp.equals("{") || temp.equals("[") || temp.equals("(")) {
+                                errors += "No hay operador entre el valor y el parentesis o simbolo de apertura";
+                            }
+                        }
+                        break;
+                    case FormulaData.NO_PRIORITY:
+                        temp = data[i].getData();
+                        if (temp.equals("{") || temp.equals("[") || temp.equals("(")) {
+                            if (data[i + 1].getPriority() != FormulaData.VALUE_PRIORITY || data[i + 1].getPriority() != FormulaData.NO_PRIORITY) {
+                                temp = data[i + 1].getData();
+                                if (!(temp.equals("cos(") || temp.equals("tan(") || temp.equals("sen("))) {
+                                    errors += "Operador seguido de un parentesis o simbolo de apertura";
+                                }
+                            }
+
+                        }
+
+                }
+                return (errors.isEmpty()) ? null : errors;
+            }
+        } else {
+            if (data.length == 0) {
+                return null;
+            } else {
+                if (data[0] != null) {
+                    if (data[0].getPriority() != FormulaData.VALUE_PRIORITY) {
+                        return "No es una formula válida";
                     }
-                    break;
-                case DataInterface.MIDDLE_PRIORITY:
-                case DataInterface.LOW_PRIORITY:
-                    break;
+            } else {
+                return null;
+            }
             }
         }
-        System.out.println(errors);
-        return (errors.isEmpty()) ? null : errors;
-        
-//        for (int i = 0; i < data.length; i++) {
-//            switch (data[i].getPriority()) {
-//                case DataInterface.MAX_PRIORITY -> {
-//                    if (data[i].getData().equals("^") && (i == data.length - 1)) {
-//                        return false;
-//                    } else if (data[i].getData().equals("^") && ((data[i + 1].getPriority() != DataInterface.VALUE_PRIORITY) &&
-//                            (data[i + 1].getPriority() != DataInterface.LOW_PRIORITY))) {
-//                        return false;
-//                    } else if (data[i].getData().equals('!') || data[i].getData().equals('^')) {
-//                        if (i == 0) {
-//                            return false;
-//                        } else if (data[i - 1].getPriority() != DataInterface.VALUE_PRIORITY) {
-//                            return false;
-//                        }
-//                    } else if (data[i + 1].getPriority() != DataInterface.VALUE_PRIORITY) {
-//                        return false;
-//                    }
-//                }
-//                case DataInterface.MIDDLE_PRIORITY | DataInterface.LOW_PRIORITY -> {
-//                    if (i == 0 || i == (data.length - 1)) {
-//                        return false;
-//                    } 
-//                    if (data[i].getData().equals("/") && data[i + 1].getData().equals("0")) {
-//                        return false;
-//                    }
-//                }
-//                case DataInterface.VALUE_PRIORITY -> {
-//                    if (data.length == 1)
-//                        return true;
-//                    if (i == 0) {
-//                        if (data[i + 1].getPriority() != DataInterface.MIDDLE_PRIORITY && data[i + 1].getPriority() != DataInterface.LOW_PRIORITY) {
-//                            return false;
-//                        }
-//                    } else if (i == data.length - 1) {
-//                        if (data[i - 1].getPriority() != DataInterface.MIDDLE_PRIORITY && data[i - 1].getPriority() != DataInterface.LOW_PRIORITY) {
-//                            return false;
-//                        }
-//                    }
-//                    
-//                    
-//                    
-//            }
-//        }
-        //return false;
+        return null;
     }
     
     /**
