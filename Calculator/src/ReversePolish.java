@@ -1,17 +1,20 @@
 
+import java.util.EmptyStackException;
+
+
 /**
  *
  * @author Fernando Flores Moya
  */
 public class ReversePolish {
 
-    public static Queue reversePolish(Queue formula) {
+    public static Queue reversePolish(Queue originalFormula) {
         Queue reversePolishQueue = new Queue();
         Stack helper = new Stack();
 
-        while (!formula.empty()) {
+        while (!originalFormula.empty()) {
             try {
-                String expression = formula.dequeue();
+                String expression = originalFormula.dequeue();
                 if (expression.equals("(") || expression.equals("[") || expression.equals("{")) {
                     helper.push(expression);
                 } else if (expression.equals("+") || expression.equals("-") || expression.equals("*") || expression.equals("/") || expression.equals("^")
@@ -61,17 +64,28 @@ public class ReversePolish {
 
     public static void main(String[] args) {
         Queue formula = new Queue();
-        formula.enqueue("4");
+        formula.enqueue("(");
+        formula.enqueue("A");
+        formula.enqueue("+");
+        formula.enqueue("B");
+        formula.enqueue(")");
         formula.enqueue("*");
-        formula.enqueue("3");
-        formula.enqueue("/");
-        formula.enqueue("2");
+        formula.enqueue("C");
+        formula.enqueue("-");
+        formula.enqueue("$");
+        formula.enqueue("(");
+        formula.enqueue("4");
+        formula.enqueue(")");
+        System.out.println(formula.printAll());
         Queue queue = reversePolish(formula);
-        while (!queue.empty()) {
-            try {
-                System.out.print(queue.dequeue() + " ");
-            } catch (EmptyQueueException ex) {
-            }
+        System.out.println(queue.printAll());
+        String[][] variables = {{"A", "B", "C"}, {"2", "3", "4"}};
+        try {
+            System.out.println(Evaluate.evaluate(queue, variables));
+        } catch (InvalidFormulaException ex) {
+            ex.printStackTrace();
+        } catch (EmptyStackException ex) {
+            ex.printStackTrace();
         }
     }
 }

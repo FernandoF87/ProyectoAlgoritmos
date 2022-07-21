@@ -34,18 +34,6 @@ public class FormulaData {
             case "tan":
                 this.data = "&";
                 break;
-            case "^":;
-            case "!":
-            case "*":
-            case "/":
-            case "+":
-            case "-":
-            case "{":
-            case "}":
-            case "[":
-            case "]":
-            case "(":
-            case ")":
             default:
                 this.data = data;
         }

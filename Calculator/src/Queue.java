@@ -68,4 +68,12 @@ public class Queue {
         }
         return data + "]";
     }
+    
+    public String printAll() {
+        String data = "";
+        for (Node current = first; current != null; current = current.getNext()) {
+            data += current.getData() + " ";
+        }
+        return data;
+    }
 }
