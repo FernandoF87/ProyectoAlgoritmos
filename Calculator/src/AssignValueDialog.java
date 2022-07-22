@@ -17,7 +17,7 @@ public class AssignValueDialog extends javax.swing.JDialog {
     public AssignValueDialog(java.awt.Frame parent, boolean modal, String variable) {
         super(parent, modal);
         initComponents();
-        lbCharacter.setText(variable);
+        lbCharacter.setText(variable + ":");
         this.setLocationRelativeTo(null);
     }
 
