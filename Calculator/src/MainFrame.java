@@ -148,11 +148,18 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    /**
+     * Event to manage the delete event, checks if a the String before the cursor is 
+     * a sen(, cos(, tan( or sqrt(.
+     * @param evt the key typed
+     */
+    
     private void tfInputKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfInputKeyTyped
         // TODO add your handling code here:
+        final byte DELETE_KEY = 8;
         synchronized (this) {
-
-            if (evt.getKeyChar() == 8) {
+                if (evt.getKeyChar() == DELETE_KEY) {
                 int caretPosition = tfInput.getCaretPosition() - 1;
                 if (caretPosition >= 2 && tfInput.getSelectedText() == null) {
                     String temp = "";
@@ -171,7 +178,8 @@ public class MainFrame extends javax.swing.JFrame {
                             toDelete = 3;
                             break;
                     }
-                    System.out.println(toDelete);
+                    //If a cos(, sen(, tan(, sqrt( wants to be eliminated, then delete all the text
+                    //of it, not only the "(".
                     if (toDelete > 0) {
                         caretPosition = tfInput.getCaretPosition() - 1;
                         String newText = "";
@@ -180,6 +188,7 @@ public class MainFrame extends javax.swing.JFrame {
                                 newText += tfInput.getText().charAt(i);
                             }
                         }
+                        //Set the new text and put the cursor on the position it should be.
                         tfInput.setText(newText);
                         tfInput.setCaretPosition(caretPosition - toDelete);
 
@@ -190,6 +199,11 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tfInputKeyTyped
 
+    
+    /**
+     * Puts the cos( text on the text field
+     * @param evt 
+     */
     private void btCosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCosActionPerformed
         // TODO add your handling code here:
         final String COS_TEXT = "cos(";
@@ -200,6 +214,10 @@ public class MainFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btCosActionPerformed
 
+    /**
+     * Puts the sen( text on the text field.
+     * @param evt 
+     */
     private void btSenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSenActionPerformed
         // TODO add your handling code here:
         final String SEN_TEXT = "sen(";
@@ -209,6 +227,10 @@ public class MainFrame extends javax.swing.JFrame {
         tfInput.setText(firstPart + SEN_TEXT + secondPart);
     }//GEN-LAST:event_btSenActionPerformed
 
+    /**
+     * Puts the tan( text on the text field.
+     * @param evt 
+     */
     private void btTanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btTanActionPerformed
         // TODO add your handling code here:
         final String TAN_TEXT = "tan(";
@@ -218,6 +240,10 @@ public class MainFrame extends javax.swing.JFrame {
         tfInput.setText(firstPart + TAN_TEXT + secondPart);
     }//GEN-LAST:event_btTanActionPerformed
 
+    /**
+     * Puts the sqrt( text on the text field.
+     * @param evt 
+     */
     private void btSqrtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSqrtActionPerformed
         // TODO add your handling code here:
         final String SQRT_TEXT = "sqrt(";
@@ -227,6 +253,10 @@ public class MainFrame extends javax.swing.JFrame {
         tfInput.setText(firstPart + SQRT_TEXT + secondPart);
     }//GEN-LAST:event_btSqrtActionPerformed
 
+    /**
+     * Puts the factorial text (!) on the text field.
+     * @param evt 
+     */
     private void btFactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btFactoActionPerformed
         // TODO add your handling code here:
         final char FACTO_SYMBOL = '!';
@@ -236,6 +266,11 @@ public class MainFrame extends javax.swing.JFrame {
         tfInput.setText(firstPart + FACTO_SYMBOL + secondPart);
     }//GEN-LAST:event_btFactoActionPerformed
 
+    /**
+     * Verify if the formula on the text fiel is balanced, is a valid formula, ask for the variables
+     * (if present) and calculate the result.
+     * @param evt 
+     */
     private void btCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCalculateActionPerformed
         // TODO add your handling code here:
         String formula = tfInput.getText();
@@ -249,20 +284,17 @@ public class MainFrame extends javax.swing.JFrame {
                         String valuesMatrix[][] = new String[variablesQueue.size()][2];
 
                         try {
+                            //If theres variables on the formula
                             if (variablesQueue.size() > 0) {
                                 AssignValueDialog variableRequest;
                                 int countVariables = variablesQueue.size();
                                 for (int i = 0; i < countVariables; i++) {
+                                    //for each variable show an assign dialog to put it on the matrix.
                                     variableRequest = new AssignValueDialog(this, true, variablesQueue.first());
                                     variableRequest.setVisible(true);
                                     String variable = variableRequest.getValue();
                                     while (variable == null) {
-                                        try {
-                                            Thread.sleep(500);
-                                        } catch (InterruptedException ex) {
-                                            ex.printStackTrace();
-                                        }
-                                        variable = variableRequest.getValue();
+                                        //Wait to set the variable value on the dialog
                                     }
                                     variableRequest.dispose();
                                     valuesMatrix[i][0] = variablesQueue.dequeue();
@@ -273,9 +305,11 @@ public class MainFrame extends javax.swing.JFrame {
                         } catch (EmptyQueueException ex) {
                             ex.printStackTrace();
                         }
+                        //Show the reverse polish formula:
                         MessageDialog.showMessageDialog(this, "Fórmula post fija: " + reversePolish.printAll(), "Fórmula post fija");
                         double result = Evaluate.evaluate(reversePolish, valuesMatrix);
-                        MessageDialog.showMessageDialog(this, "Resultado de la formula:\n\n" + result, "Resultado");
+                        //Show the result:
+                        MessageDialog.showMessageDialog(this, "Resultado de la formula: " + result, "Resultado");
                         tfInput.setText("");
                     } catch (InvalidFormulaException ex) {
                         lbError.setText("Error de sintaxis");
@@ -292,10 +326,19 @@ public class MainFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btCalculateActionPerformed
 
+    /**
+     * Event to set the text of the label to null after show an error message.
+     * @param evt 
+     */
     private void tfInputKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfInputKeyReleased
         lbError.setText(null);
     }//GEN-LAST:event_tfInputKeyReleased
 
+    /**
+     * Transforms the plain text to a separated string text.
+     * @param formula the text of the formula
+     * @return a queue with all the information inputed by the user separated
+     */
     private Queue transformData(String formula) {
         FormulaData[] data = new FormulaData[formula.length()];
         final String[] FUNCTIONS_TEXT = {"cos", "sen", "tan", "sqrt"};
@@ -308,6 +351,8 @@ public class MainFrame extends javax.swing.JFrame {
                 case 't':
                     if (i + 5 < formula.length()) {
                         temp = formula.substring(i, i + 5);
+                        //If the substring contains some function text, add it to the array and
+                        //advance to the next value on the string
                         for (int j = 0; j < FUNCTIONS_TEXT.length; j++) {
                             if (temp.contains(FUNCTIONS_TEXT[j])) {
                                 data[i] = new FormulaData(FUNCTIONS_TEXT[j]);
@@ -318,6 +363,7 @@ public class MainFrame extends javax.swing.JFrame {
                             }
                         }
                     } else {
+                        //If there is not enough character to make a substring, then the letter is a variable
                         data[i] = new FormulaData(Character.toString(formula.charAt(i)));
                     }
                     break;
@@ -387,6 +433,10 @@ public class MainFrame extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Search for variables on the formula.
+     * @param data a queue with the data of the formula separated.
+     */
     private void fillQueueVariables(Queue data) {
         Queue tempQueue = data.copy();
         variablesQueue = new Queue();
@@ -395,6 +445,7 @@ public class MainFrame extends javax.swing.JFrame {
                 FormulaData temp = new FormulaData(tempQueue.dequeue());
                 if (temp.getPriority() == FormulaData.VALUE_PRIORITY) {
                     if (Character.isLetter(temp.getData().charAt(0))) {
+                        //If the variable is not in the variable queue, then put it on the queue.
                         if (variablesQueue.search(temp.getData()) == -1) {
                             variablesQueue.enqueue(temp.getData());
                         }

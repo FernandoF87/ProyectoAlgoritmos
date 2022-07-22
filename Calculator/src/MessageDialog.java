@@ -71,8 +71,14 @@ public class MessageDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Method used to show a message to the user.
+     * @param parent the parent of the dialog.
+     * @param message the message to show.
+     * @param title the title of the dialog.
+     */
     public static void showMessageDialog(java.awt.Frame parent, String message, String title) {
-        MessageDialog msj = new MessageDialog(parent, false, message, title);
+        MessageDialog msj = new MessageDialog(parent, true, message, title);
         msj.setVisible(true);
     }
     

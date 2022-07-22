@@ -13,6 +13,7 @@ public class AssignValueDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form AssignedValueDialog
+     * @param varible the name of the variable to put it value.
      */
     public AssignValueDialog(java.awt.Frame parent, boolean modal, String variable) {
         super(parent, modal);
@@ -97,6 +98,10 @@ public class AssignValueDialog extends javax.swing.JDialog {
 
     }//GEN-LAST:event_tfValueActionPerformed
 
+    /**
+     * Asign the value to a variable if the text is not empty.
+     * @param evt 
+     */
     private void btAssignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAssignActionPerformed
         if (!tfValue.getText().isEmpty()) {
             try {
@@ -117,17 +122,22 @@ public class AssignValueDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btAssignActionPerformed
 
+    /**
+     * Event used to eliminate the label error text when a key is released
+     * @param evt 
+     */
     private void tfValueKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfValueKeyReleased
         lbError.setText("");
     }//GEN-LAST:event_tfValueKeyReleased
 
+    /**
+     * Get of the variable value
+     * @return a String with the value of the variable
+     */
     public String getValue() {
         return value;
     }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAssign;
