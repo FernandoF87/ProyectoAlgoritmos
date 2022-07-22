@@ -15,7 +15,6 @@ public class MainFrame extends javax.swing.JFrame {
 
     private int caretPosition;
     private byte toDelete;
-    private AssignedValueDialog assignedValue;
     private Queue reversePolish;
     private Queue variablesQueue;
 
@@ -266,10 +265,10 @@ public class MainFrame extends javax.swing.JFrame {
 
                         try {
                             if (variablesQueue.size() > 0) {
-                                RequestVariable variableRequest;
+                                AssignValueDialog variableRequest;
                                 int countVariables = variablesQueue.size();
                                 for (int i = 0; i < countVariables; i++) {
-                                    variableRequest = new RequestVariable(this, true, variablesQueue.first());
+                                    variableRequest = new AssignValueDialog(this, true, variablesQueue.first());
                                     variableRequest.setVisible(true);
                                     String variable = variableRequest.getValue();
                                     while (variable == null) {
@@ -328,7 +327,7 @@ public class MainFrame extends javax.swing.JFrame {
                                 data[i] = new FormulaData(FUNCTIONS_TEXT[j]);
                                 i += FUNCTIONS_TEXT[j].length() - 1;
                                 break;
-                            } else if (i == FUNCTIONS_TEXT.length - 1) {
+                            } else if (j == FUNCTIONS_TEXT.length - 1) {
                                 data[i] = new FormulaData(Character.toString(temp.charAt(0)));
                             }
                         }

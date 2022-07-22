@@ -7,17 +7,17 @@
  *
  * @author cjcor
  */
-public class AssignedValueDialog extends javax.swing.JDialog {
+public class AssignValueDialog extends javax.swing.JDialog {
 
-    public static String valor;
+    private String value;
 
     /**
      * Creates new form AssignedValueDialog
      */
-    public AssignedValueDialog(java.awt.Frame parent, boolean modal, String character) {
+    public AssignValueDialog(java.awt.Frame parent, boolean modal, String variable) {
         super(parent, modal);
         initComponents();
-        lbCharacter.setText(character);
+        lbCharacter.setText(variable);
         this.setLocationRelativeTo(null);
     }
 
@@ -31,8 +31,8 @@ public class AssignedValueDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        btAssigned = new javax.swing.JButton();
-        tfValor = new javax.swing.JTextField();
+        btAssign = new javax.swing.JButton();
+        tfValue = new javax.swing.JTextField();
         lbCharacter = new javax.swing.JLabel();
         lbError = new javax.swing.JLabel();
 
@@ -43,31 +43,31 @@ public class AssignedValueDialog extends javax.swing.JDialog {
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btAssigned.setBackground(new java.awt.Color(102, 102, 255));
-        btAssigned.setFont(new java.awt.Font("Roboto Black", 0, 12)); // NOI18N
-        btAssigned.setForeground(new java.awt.Color(255, 255, 255));
-        btAssigned.setText("Asignar Valor");
-        btAssigned.addActionListener(new java.awt.event.ActionListener() {
+        btAssign.setBackground(new java.awt.Color(102, 102, 255));
+        btAssign.setFont(new java.awt.Font("Roboto Black", 0, 12)); // NOI18N
+        btAssign.setForeground(new java.awt.Color(255, 255, 255));
+        btAssign.setText("Asignar Valor");
+        btAssign.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btAssignedActionPerformed(evt);
+                btAssignActionPerformed(evt);
             }
         });
-        jPanel1.add(btAssigned, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 120, -1));
+        jPanel1.add(btAssign, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 120, -1));
 
-        tfValor.setBackground(new java.awt.Color(255, 255, 255));
-        tfValor.setFont(new java.awt.Font("Roboto", 0, 10)); // NOI18N
-        tfValor.setForeground(new java.awt.Color(0, 0, 0));
-        tfValor.addActionListener(new java.awt.event.ActionListener() {
+        tfValue.setBackground(new java.awt.Color(255, 255, 255));
+        tfValue.setFont(new java.awt.Font("Roboto", 0, 10)); // NOI18N
+        tfValue.setForeground(new java.awt.Color(0, 0, 0));
+        tfValue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfValorActionPerformed(evt);
+                tfValueActionPerformed(evt);
             }
         });
-        tfValor.addKeyListener(new java.awt.event.KeyAdapter() {
+        tfValue.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                tfValorKeyReleased(evt);
+                tfValueKeyReleased(evt);
             }
         });
-        jPanel1.add(tfValor, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 90, 30));
+        jPanel1.add(tfValue, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 90, 30));
 
         lbCharacter.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         lbCharacter.setForeground(new java.awt.Color(0, 0, 0));
@@ -93,40 +93,47 @@ public class AssignedValueDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public static String showMessageDialog(java.awt.Frame parent, String message) {
-        AssignedValueDialog msj = new AssignedValueDialog(parent, true, message + ":");
-        msj.setVisible(true);
-        return valor;
-    }
-    private void tfValorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfValorActionPerformed
+    private void tfValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfValueActionPerformed
 
-    }//GEN-LAST:event_tfValorActionPerformed
+    }//GEN-LAST:event_tfValueActionPerformed
 
-    private void btAssignedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAssignedActionPerformed
-        valor = tfValor.getText();
-        if (!valor.matches(("[0-9]*"))) {
-            lbError.setText("Caracteres invalidos");
-        }else if(valor.equals("")){
-            lbError.setText("Valor Null");
+    private void btAssignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAssignActionPerformed
+        if (!tfValue.getText().isEmpty()) {
+            try {
+                double temp = Double.parseDouble(tfValue.getText());
+                value = temp + "";
+                this.setVisible(false);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                this.dispose();
+            } catch (NumberFormatException ex) {
+                MessageDialog.showMessageDialog(null, "Por favor digite un número válido", "Error");
+            }
+        } else {
+            MessageDialog.showMessageDialog(null, "Por favor llene el campo de texto", "Error");
         }
-        else{
-            dispose();
-        }
-    }//GEN-LAST:event_btAssignedActionPerformed
+    }//GEN-LAST:event_btAssignActionPerformed
 
-    private void tfValorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfValorKeyReleased
+    private void tfValueKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfValueKeyReleased
         lbError.setText("");
-    }//GEN-LAST:event_tfValorKeyReleased
+    }//GEN-LAST:event_tfValueKeyReleased
 
-    /**
-     * @param args the command line arguments
-     */
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btAssigned;
+    private javax.swing.JButton btAssign;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lbCharacter;
     private javax.swing.JLabel lbError;
-    private javax.swing.JTextField tfValor;
+    private javax.swing.JTextField tfValue;
     // End of variables declaration//GEN-END:variables
 }
