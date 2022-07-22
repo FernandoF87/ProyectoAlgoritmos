@@ -2,6 +2,8 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.EmptyStackException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -123,11 +125,6 @@ public class MainFrame extends javax.swing.JFrame {
         tfInput.setBackground(new java.awt.Color(255, 255, 255));
         tfInput.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
         tfInput.setForeground(new java.awt.Color(0, 0, 0));
-        tfInput.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                tfInputCaretUpdate(evt);
-            }
-        });
         tfInput.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tfInputKeyReleased(evt);
@@ -157,50 +154,66 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tfInputCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tfInputCaretUpdate
-        // TODO add your handling code here:
-        if (!tfInput.getText().isEmpty() && tfInput.getCaretPosition() > 0) {
-
-            if (tfInput.getText().charAt(tfInput.getCaretPosition() - 1) == '(') {
-                caretPosition = tfInput.getCaretPosition() - 1;
-                String text = "";
-                for (int i = tfInput.getCaretPosition() - 1; i >= tfInput.getCaretPosition() - 4; i--) {
-                    text = tfInput.getText().charAt(i) + text;
-                }
-                System.out.println("text=" + text);
-                switch (text) {
-                    case "cos(":
-                    case "sen(":
-                    case "tan(":
-                        toDelete = 3;
-                        break;
-                    case "qrt(":
-                        toDelete = 4;
-                        break;
-                    default:
-                        toDelete = -1;
-                }
-            } else {
-                caretPosition = -1;
-            }
-        } else {
-            caretPosition = -1;
-        }
-    }//GEN-LAST:event_tfInputCaretUpdate
-
+    private void updateCaretPosition() {
+        tfInput.setCaretPosition(tfInput.getCaretPosition());
+    }
+    
     private void tfInputKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfInputKeyTyped
         // TODO add your handling code here:
-        if (evt.getKeyChar() == 8 && toDelete != -1) {
-            System.out.println("Delete");
-            String newString = "";
-            for (int i = 0; i < tfInput.getText().length(); i++) {
-                if (i < tfInput.getCaretPosition() - toDelete || i >= tfInput.getCaretPosition()) {
-                    newString += tfInput.getText().charAt(i);
+        synchronized (this) {
+            
+            if (evt.getKeyChar() == 8) { 
+                int caretPosition = tfInput.getCaretPosition() - 1;
+                if (caretPosition >= 2 && tfInput.getSelectedText() == null) {
+                    String temp = "";
+                for (int i = caretPosition; i >= caretPosition - 2; i--) {
+                    temp = tfInput.getText().charAt(i) + temp;
                 }
+                System.out.println(temp);
+                byte toDelete = 0;
+                switch (temp) {
+                    case "cos":
+                    case "sen":
+                    case "tan":
+                        toDelete = 2;
+                        break;
+                    case "qrt":
+                        toDelete = 3;
+                        break;
+                }
+                System.out.println(toDelete);
+                if (toDelete > 0) {
+                    caretPosition = tfInput.getCaretPosition() - 1;
+                    String newText = "";
+                    for (int i = 0; i < tfInput.getText().length(); i++) {
+                        if (i < caretPosition - toDelete || i > caretPosition) {
+                            newText += tfInput.getText().charAt(i);
+                        }
+                    }
+                    tfInput.setText(newText);
+                    tfInput.setCaretPosition(caretPosition - toDelete);
+                    
+                }
+                }
+                
             }
-            tfInput.setText(newString);
-            toDelete = -1;
+//            System.out.println(tfInput.getSelectedText());
+//            if (evt.getKeyChar() == 8 && toDelete != -1) {
+//                System.out.println("Delete");
+//                String newString = "";
+//                for (int i = 0; i < tfInput.getText().length(); i++) {
+//                    if (i < tfInput.getCaretPosition() - toDelete || i >= tfInput.getCaretPosition()) {
+//                        newString += tfInput.getText().charAt(i);
+//                    }
+//                }
+//                tfInput.setText(newString);
+//                toDelete = -1;
+//                
+//            }
+//            updateCaretPosition();
         }
+        
+
     }//GEN-LAST:event_tfInputKeyTyped
 
     private void btCosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCosActionPerformed
