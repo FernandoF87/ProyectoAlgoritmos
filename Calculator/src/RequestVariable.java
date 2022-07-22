@@ -12,13 +12,12 @@ public class RequestVariable extends javax.swing.JDialog {
     /**
      * Creates new form RequestVariable
      */
-    
     private String value;
-    
+
     public RequestVariable(java.awt.Frame parent, boolean modal, String variableName) {
         super(parent, modal);
         initComponents();
-        final String message = "Digite el valor para la variable " + variableName;
+        final String message = "Digite el valor para: " + variableName;
         lbText.setText(message);
         value = null;
         this.setLocationRelativeTo(null);
@@ -33,49 +32,77 @@ public class RequestVariable extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btAccept = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         lbText = new javax.swing.JLabel();
         tfVariable = new javax.swing.JTextField();
+        lbError = new javax.swing.JLabel();
+        btAccept = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Ingreso de variables");
         setAlwaysOnTop(true);
+        setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btAccept.setText("Aceptar");
+        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel1.setForeground(new java.awt.Color(0, 0, 0));
+
+        lbText.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        lbText.setForeground(new java.awt.Color(0, 0, 0));
+        lbText.setText("Digite el valor para");
+
+        tfVariable.setBackground(new java.awt.Color(255, 255, 255));
+        tfVariable.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        tfVariable.setForeground(new java.awt.Color(0, 0, 0));
+        tfVariable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfVariableKeyReleased(evt);
+            }
+        });
+
+        lbError.setBackground(new java.awt.Color(255, 255, 255));
+        lbError.setFont(new java.awt.Font("Roboto Medium", 0, 10)); // NOI18N
+        lbError.setForeground(new java.awt.Color(255, 0, 0));
+        lbError.setText("Error");
+
+        btAccept.setBackground(new java.awt.Color(102, 102, 255));
+        btAccept.setFont(new java.awt.Font("Roboto Black", 0, 12)); // NOI18N
+        btAccept.setForeground(new java.awt.Color(255, 255, 255));
+        btAccept.setText("Asignar Valor");
         btAccept.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btAcceptActionPerformed(evt);
             }
         });
 
-        lbText.setText("jLabel1");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(359, Short.MAX_VALUE)
-                .addComponent(btAccept)
-                .addGap(38, 38, 38))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lbText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tfVariable, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfVariable, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btAccept, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbError, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(9, 9, 9)
                 .addComponent(lbText)
-                .addGap(18, 18, 18)
-                .addComponent(tfVariable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tfVariable, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbError, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btAccept)
-                .addGap(17, 17, 17))
+                .addContainerGap())
         );
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 180, 120));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -93,16 +120,17 @@ public class RequestVariable extends javax.swing.JDialog {
                 }
                 this.dispose();
             } catch (NumberFormatException ex) {
-                MessageDialog.showMessageDialog(null, "Por favor digite un número válido", "Error");
+                lbError.setText("Por favor digite un número válido");
             }
         } else {
-            MessageDialog.showMessageDialog(null, "Por favor llene el campo de texto", "Error");
+            lbError.setText("Por favor llene el campo de texto");
         }
     }//GEN-LAST:event_btAcceptActionPerformed
 
-    
-    
-    
+    private void tfVariableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfVariableKeyReleased
+        lbError.setText(null);
+    }//GEN-LAST:event_tfVariableKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -152,11 +180,12 @@ public class RequestVariable extends javax.swing.JDialog {
     public void setValue(String value) {
         this.value = value;
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAccept;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lbError;
     private javax.swing.JLabel lbText;
     private javax.swing.JTextField tfVariable;
     // End of variables declaration//GEN-END:variables
