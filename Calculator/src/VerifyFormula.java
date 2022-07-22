@@ -12,7 +12,7 @@ import java.util.EmptyStackException;
  */
 public class VerifyFormula {
     
-    public static boolean checkString(String formula) {
+    public static boolean isBalanced(String formula) {
         if (formula == null || formula.isBlank()) {
             return true;
         }
@@ -81,8 +81,9 @@ public class VerifyFormula {
                 return false;
             }
         }
-
-        return true;
+        if (stack.size() == 1)
+            return true;
+        return false;
     }
 }
 

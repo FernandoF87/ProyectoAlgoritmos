@@ -1,9 +1,5 @@
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.EmptyStackException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -15,8 +11,6 @@ import java.util.logging.Logger;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    private int caretPosition;
-    private byte toDelete;
     private Queue reversePolish;
     private Queue variablesQueue;
 
@@ -154,66 +148,46 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void updateCaretPosition() {
-        tfInput.setCaretPosition(tfInput.getCaretPosition());
-    }
-    
     private void tfInputKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfInputKeyTyped
         // TODO add your handling code here:
         synchronized (this) {
-            
-            if (evt.getKeyChar() == 8) { 
+
+            if (evt.getKeyChar() == 8) {
                 int caretPosition = tfInput.getCaretPosition() - 1;
                 if (caretPosition >= 2 && tfInput.getSelectedText() == null) {
                     String temp = "";
-                for (int i = caretPosition; i >= caretPosition - 2; i--) {
-                    temp = tfInput.getText().charAt(i) + temp;
-                }
-                System.out.println(temp);
-                byte toDelete = 0;
-                switch (temp) {
-                    case "cos":
-                    case "sen":
-                    case "tan":
-                        toDelete = 2;
-                        break;
-                    case "qrt":
-                        toDelete = 3;
-                        break;
-                }
-                System.out.println(toDelete);
-                if (toDelete > 0) {
-                    caretPosition = tfInput.getCaretPosition() - 1;
-                    String newText = "";
-                    for (int i = 0; i < tfInput.getText().length(); i++) {
-                        if (i < caretPosition - toDelete || i > caretPosition) {
-                            newText += tfInput.getText().charAt(i);
-                        }
+                    for (int i = caretPosition; i >= caretPosition - 2; i--) {
+                        temp = tfInput.getText().charAt(i) + temp;
                     }
-                    tfInput.setText(newText);
-                    tfInput.setCaretPosition(caretPosition - toDelete);
-                    
-                }
-                }
-                
-            }
-//            System.out.println(tfInput.getSelectedText());
-//            if (evt.getKeyChar() == 8 && toDelete != -1) {
-//                System.out.println("Delete");
-//                String newString = "";
-//                for (int i = 0; i < tfInput.getText().length(); i++) {
-//                    if (i < tfInput.getCaretPosition() - toDelete || i >= tfInput.getCaretPosition()) {
-//                        newString += tfInput.getText().charAt(i);
-//                    }
-//                }
-//                tfInput.setText(newString);
-//                toDelete = -1;
-//                
-//            }
-//            updateCaretPosition();
-        }
-        
+                    System.out.println(temp);
+                    byte toDelete = 0;
+                    switch (temp) {
+                        case "cos":
+                        case "sen":
+                        case "tan":
+                            toDelete = 2;
+                            break;
+                        case "qrt":
+                            toDelete = 3;
+                            break;
+                    }
+                    System.out.println(toDelete);
+                    if (toDelete > 0) {
+                        caretPosition = tfInput.getCaretPosition() - 1;
+                        String newText = "";
+                        for (int i = 0; i < tfInput.getText().length(); i++) {
+                            if (i < caretPosition - toDelete || i > caretPosition) {
+                                newText += tfInput.getText().charAt(i);
+                            }
+                        }
+                        tfInput.setText(newText);
+                        tfInput.setCaretPosition(caretPosition - toDelete);
 
+                    }
+                }
+
+            }
+        }
     }//GEN-LAST:event_tfInputKeyTyped
 
     private void btCosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCosActionPerformed
@@ -265,12 +239,10 @@ public class MainFrame extends javax.swing.JFrame {
     private void btCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCalculateActionPerformed
         // TODO add your handling code here:
         String formula = tfInput.getText();
-        if (VerifyFormula.checkString(formula)) {
+        if (VerifyFormula.isBalanced(formula)) {
             Queue data = transformData(formula);
             if (data != null) {
-                System.out.println(data.printAll());
                 reversePolish = ReversePolish.reversePolish(data);
-                System.out.println(reversePolish.printAll());
                 if (VerifyFormula.validateSyntax(reversePolish.copy())) {
                     try {
                         fillQueueVariables(reversePolish.copy());
@@ -296,21 +268,22 @@ public class MainFrame extends javax.swing.JFrame {
                                     valuesMatrix[i][0] = variablesQueue.dequeue();
                                     valuesMatrix[i][1] = variable;
                                 }
-                                
+
                             }
                         } catch (EmptyQueueException ex) {
                             ex.printStackTrace();
                         }
+                        MessageDialog.showMessageDialog(this, "Fórmula post fija: " + reversePolish.printAll(), "Fórmula post fija");
                         double result = Evaluate.evaluate(reversePolish, valuesMatrix);
                         MessageDialog.showMessageDialog(this, "Resultado de la formula:\n\n" + result, "Resultado");
                         tfInput.setText("");
                     } catch (InvalidFormulaException ex) {
-                        System.out.println(ex.getMessage());
+                        lbError.setText("Error de sintaxis");
                     } catch (EmptyStackException ex) {
                         ex.printStackTrace();
                     }
                 } else {
-                    MessageDialog.showMessageDialog(this, "Error de sintaxis", "Error");
+                   lbError.setText("Error de sintaxis");
                 }
             }
         } else {
@@ -322,7 +295,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void tfInputKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfInputKeyReleased
         lbError.setText(null);
     }//GEN-LAST:event_tfInputKeyReleased
-    
+
     private Queue transformData(String formula) {
         FormulaData[] data = new FormulaData[formula.length()];
         final String[] FUNCTIONS_TEXT = {"cos", "sen", "tan", "sqrt"};
@@ -413,10 +386,9 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
     }
-    
+
     private void fillQueueVariables(Queue data) {
         Queue tempQueue = data.copy();
-        int count = 0;
         variablesQueue = new Queue();
         while (!tempQueue.empty()) {
             try {
@@ -431,7 +403,7 @@ public class MainFrame extends javax.swing.JFrame {
             } catch (EmptyQueueException ex) {
                 ex.printStackTrace();
             }
-            
+
         }
     }
 

@@ -61,25 +61,4 @@ public class ReversePolish {
         }
         return reversePolishQueue;
     }
-
-    public static void main(String[] args) {
-        Queue formula = new Queue();
-        formula.enqueue("(");
-        formula.enqueue("4");
-        formula.enqueue("+");
-        formula.enqueue("3");
-        formula.enqueue(")");
-        formula.enqueue("!");
-        System.out.println(formula.printAll());
-        Queue queue = reversePolish(formula);
-        System.out.println(queue.printAll());
-        String[][] variables = {{"A", "B", "C"}, {"1", "2", "4"}};
-        try {
-            System.out.println(Evaluate.evaluate(queue, variables));
-        } catch (InvalidFormulaException ex) {
-            ex.printStackTrace();
-        } catch (EmptyStackException ex) {
-            ex.printStackTrace();
-        }
-    }
 }

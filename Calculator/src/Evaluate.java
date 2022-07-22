@@ -53,7 +53,7 @@ public class Evaluate {
                             break;
                         case "!":
                             if (x - (int)x != 0)
-                                throw new InvalidFormulaException("Error de syntaxis");
+                                throw new InvalidFormulaException("Error de sintaxis");
                             z = factorial((int)x);
                     }
                     stack.push(z + "");
@@ -70,11 +70,12 @@ public class Evaluate {
                 }
             } catch (EmptyQueueException ex) {
             } catch (EmptyStackException ex) {
-                throw new InvalidFormulaException("Error de syntaxis");
+                throw new InvalidFormulaException("Error de sintaxis");
             }
         }
-
-        return Double.parseDouble(stack.pop());
+        if (stack.size() == 1)
+            return Double.parseDouble(stack.pop());
+        throw new InvalidFormulaException("Error de sintaxis");
     }
     
     public static int factorial(int num) {
