@@ -36,7 +36,7 @@ public class AssignValueDialog extends javax.swing.JDialog {
         lbCharacter = new javax.swing.JLabel();
         lbError = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Asignar Valor");
         setResizable(false);
 
