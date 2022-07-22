@@ -16,7 +16,8 @@ public class MainFrame extends javax.swing.JFrame {
     private int caretPosition;
     private byte toDelete;
     private AssignedValueDialog assignedValue;
-    private ReversePolish polish;
+    private Queue reversePolish;
+    private Queue variablesQueue;
 
     /**
      * Creates new form MainFrame
@@ -256,18 +257,42 @@ public class MainFrame extends javax.swing.JFrame {
             Queue data = transformData(formula);
             if (data != null) {
                 System.out.println(data.printAll());
-                Queue reversePolish = ReversePolish.reversePolish(data);
+                reversePolish = ReversePolish.reversePolish(data);
                 System.out.println(reversePolish.printAll());
                 if (VerifyFormula.validateSyntax(reversePolish.copy())) {
                     try {
-                        System.out.println(Evaluate.evaluate(reversePolish, null));
+                        fillQueueVariables(reversePolish.copy());
+                        String valuesMatrix[][] = new String[variablesQueue.size()][2];
+
+                        try {
+                            if (variablesQueue.size() > 0) {
+                                RequestVariable variableRequest = new RequestVariable(this, true, variablesQueue.first());
+                            variableRequest.setVisible(true);
+                            String variable = variableRequest.getValue();
+                            while (variable == null) {
+                                Thread.sleep(500);
+                                variable = variableRequest.getValue();
+                            }
+                            for (int i = 0; i < variablesQueue.size(); i++) {
+                                valuesMatrix[i][0] = variablesQueue.dequeue();
+                                valuesMatrix[i][1] = variableRequest.getValue();
+                            }
+                                variableRequest.dispose();
+                            }
+                        } catch (EmptyQueueException ex) {
+                            ex.printStackTrace();
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                        double result = Evaluate.evaluate(reversePolish, valuesMatrix);
+                        MessageDialog.showMessageDialog(this, "Resultado de la formula:\n\n" + result, "Resultado");
                     } catch (InvalidFormulaException ex) {
                         System.out.println(ex.getMessage());
                     } catch (EmptyStackException ex) {
                         ex.printStackTrace();
                     }
                 } else {
-                    System.out.println("Error de sintaxis");
+                    MessageDialog.showMessageDialog(this, "Error de sintaxis", "Error");
                 }
             }
         } else {
@@ -380,6 +405,27 @@ public class MainFrame extends javax.swing.JFrame {
             }
         }
 
+    }
+    
+    private void fillQueueVariables(Queue data) {
+        Queue tempQueue = data.copy();
+        int count = 0;
+        variablesQueue = new Queue();
+        while (!tempQueue.empty()) {
+            try {
+                FormulaData temp = new FormulaData(tempQueue.dequeue());
+                if (temp.getPriority() == FormulaData.VALUE_PRIORITY) {
+                    if (Character.isLetter(temp.getData().charAt(0))) {
+                        if (variablesQueue.search(temp.getData()) == -1) {
+                            variablesQueue.enqueue(temp.getData());
+                        }
+                    }
+                }
+            } catch (EmptyQueueException ex) {
+                ex.printStackTrace();
+            }
+            
+        }
     }
 
     /**

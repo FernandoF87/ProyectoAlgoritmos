@@ -8,6 +8,7 @@ public class Queue {
     
     private Node first;
     private Node last;
+    private int size;
     
     public Queue() {
         
@@ -33,6 +34,7 @@ public class Queue {
         if (first == null) {
             last = null;
         }
+        size--;
         return data;
 
     }
@@ -45,6 +47,7 @@ public class Queue {
             last.setNext(temp);
             last = temp;
         }
+        size++;
     }
 
     public int search(String data) {
@@ -56,6 +59,10 @@ public class Queue {
             index++;
         }
         return -1;
+    }
+    
+    public int size() {
+        return size;
     }
 
     public String toString() {
