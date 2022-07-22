@@ -110,10 +110,10 @@ public class AssignValueDialog extends javax.swing.JDialog {
                 }
                 this.dispose();
             } catch (NumberFormatException ex) {
-                MessageDialog.showMessageDialog(null, "Por favor digite un número válido", "Error");
+                lbError.setText("Digite un número válido");
             }
         } else {
-            MessageDialog.showMessageDialog(null, "Por favor llene el campo de texto", "Error");
+            lbError.setText("Por favor llene el campo");
         }
     }//GEN-LAST:event_btAssignActionPerformed
 
