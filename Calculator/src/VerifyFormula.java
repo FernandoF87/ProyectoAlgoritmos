@@ -6,12 +6,19 @@
 import java.util.EmptyStackException;
 
 /**
- *
+ * Class that allows for the validation of formulas
+ * 
  * @version
- * @author Jostin Castro
+ * @author Jostin Castro, Fernando Flores
  */
 public class VerifyFormula {
     
+    /**
+     * Determines if a mathematical formula is balanced or not
+     * 
+     * @param formula a string representing a mathematical formula
+     * @return a statement representing if the formula is balanced
+     */
     public static boolean isBalanced(String formula) {
         if (formula == null || formula.isBlank()) {
             return true;
@@ -63,6 +70,12 @@ public class VerifyFormula {
         return true;
     }
     
+    /**
+     * Verifies the syntax of a reverse polish notation formula
+     * 
+     * @param reversePolish a queue of strings representing a formula
+     * @return a statement representing if the formula has valid syntax
+     */
     public static boolean validateSyntax(Queue reversePolish) {
         Stack stack = new Stack();
 

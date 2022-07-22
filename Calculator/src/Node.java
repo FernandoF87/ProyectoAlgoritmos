@@ -4,7 +4,8 @@
  */
 
 /**
- *
+ * Node for stack and queue that contains a string
+ * 
  * @version
  * @author Jostin Castro
  */
@@ -17,6 +18,8 @@ public class Node {
         this.data = data;
     }
 
+    // Setters and getters
+    
     public String getData() {
         return data;
     }
@@ -32,7 +35,4 @@ public class Node {
     public void setNext(Node next) {
         this.next = next;
     }
-    
-    
-
 }

@@ -2,17 +2,28 @@
 import java.util.EmptyStackException;
 
 /**
- *
+ * Class that allows the evaluation of a reverse polish notation formula
+ * 
  * @author Fernando Flores Moya
  */
 public class Evaluate {
 
+    /**
+     * Evaluates a formula in reverse polish notation
+     * 
+     * @param reversePolish a queue of strings that represent a formula
+     * @param variables a matrix of variables and their values
+     * @return the result of evaluating the formula
+     * @throws InvalidFormulaException
+     * @throws EmptyStackException 
+     */
     public static double evaluate(Queue reversePolish, String[][] variables) throws InvalidFormulaException, EmptyStackException {
         Stack stack = new Stack();
 
         while (!reversePolish.empty()) {
             try {
                 String data = reversePolish.dequeue();
+                // Determines if the symbol is a two parameter operand
                 if (data.equals("+") || data.equals("-") || data.equals("*") || data.equals("/") || data.equals("^")) {
                     double x = Double.parseDouble(stack.pop());
                     double y = Double.parseDouble(stack.pop());
@@ -35,7 +46,7 @@ public class Evaluate {
                             break;
                     }
                     stack.push(z + "");
-                } else if (data.equals("$") || data.equals("%") || data.equals("&") || data.equals("#") || data.equals("!")) {
+                } else if (data.equals("$") || data.equals("%") || data.equals("&") || data.equals("#") || data.equals("!")) { // One parameter operand
                     double x = Double.parseDouble(stack.pop());
                     double z = 0;
                     switch (data) {
@@ -57,7 +68,7 @@ public class Evaluate {
                             z = factorial((int)x);
                     }
                     stack.push(z + "");
-                } else {
+                } else { // Regular value
                     if (Character.isLetter(data.charAt(0))) {
                         for (int i = 0; i < variables.length; i++) {
                             if (variables[i][0].equals(data)) {
@@ -78,6 +89,12 @@ public class Evaluate {
         throw new InvalidFormulaException("Error de sintaxis");
     }
     
+    /**
+     * Calculate the factorial of a whole number
+     * 
+     * @param num the number to calculate the factorial of
+     * @return the factorial of the number
+     */
     public static int factorial(int num) {
         int result = 1;
         while (num > 0) {

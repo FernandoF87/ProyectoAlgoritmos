@@ -4,12 +4,12 @@
  */
 
 /**
- *
+ * Represents a symbol in a formula with a priority
+ * 
  * @version
  * @author Jostin Castro
  */
 public class FormulaData {
-    
     
     public static final byte MAX_PRIORITY = 3;
     public static final byte MIDDLE_PRIORITY = 2;
@@ -20,6 +20,11 @@ public class FormulaData {
     private byte priority;
     private String data;
 
+    /**
+     * Constructor that sets that priority for the symbol based on its data
+     * 
+     * @param data a string representing a value or operand
+     */
     public FormulaData(String data) {
         switch (data) {
         case "sqrt":
@@ -72,6 +77,8 @@ public class FormulaData {
         this.priority = priority;
     }
 
+    // Setters and getters
+    
     public void setPriority(byte priority) {
         this.priority = priority;
     }
@@ -83,7 +90,7 @@ public class FormulaData {
     public int getPriority() {
         return priority;
     }
-    
+
     public String getData() {
         return data;
     }
