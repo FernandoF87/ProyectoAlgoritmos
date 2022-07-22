@@ -59,7 +59,7 @@ public class Evaluate {
                     stack.push(z + "");
                 } else {
                     if (Character.isLetter(data.charAt(0))) {
-                        for (int i = 0; i < variables[0].length; i++) {
+                        for (int i = 0; i < variables.length; i++) {
                             if (variables[i][0].equals(data)) {
                                 data = variables[i][1];
                                 break;

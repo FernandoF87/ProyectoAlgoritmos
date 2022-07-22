@@ -266,26 +266,32 @@ public class MainFrame extends javax.swing.JFrame {
 
                         try {
                             if (variablesQueue.size() > 0) {
-                                RequestVariable variableRequest = new RequestVariable(this, true, variablesQueue.first());
-                            variableRequest.setVisible(true);
-                            String variable = variableRequest.getValue();
-                            while (variable == null) {
-                                Thread.sleep(500);
-                                variable = variableRequest.getValue();
-                            }
-                            for (int i = 0; i < variablesQueue.size(); i++) {
-                                valuesMatrix[i][0] = variablesQueue.dequeue();
-                                valuesMatrix[i][1] = variableRequest.getValue();
-                            }
-                                variableRequest.dispose();
+                                RequestVariable variableRequest;
+                                int countVariables = variablesQueue.size();
+                                for (int i = 0; i < countVariables; i++) {
+                                    variableRequest = new RequestVariable(this, true, variablesQueue.first());
+                                    variableRequest.setVisible(true);
+                                    String variable = variableRequest.getValue();
+                                    while (variable == null) {
+                                        try {
+                                            Thread.sleep(500);
+                                        } catch (InterruptedException ex) {
+                                            ex.printStackTrace();
+                                        }
+                                        variable = variableRequest.getValue();
+                                    }
+                                    variableRequest.dispose();
+                                    valuesMatrix[i][0] = variablesQueue.dequeue();
+                                    valuesMatrix[i][1] = variable;
+                                }
+                                
                             }
                         } catch (EmptyQueueException ex) {
-                            ex.printStackTrace();
-                        } catch (InterruptedException ex) {
                             ex.printStackTrace();
                         }
                         double result = Evaluate.evaluate(reversePolish, valuesMatrix);
                         MessageDialog.showMessageDialog(this, "Resultado de la formula:\n\n" + result, "Resultado");
+                        tfInput.setText("");
                     } catch (InvalidFormulaException ex) {
                         System.out.println(ex.getMessage());
                     } catch (EmptyStackException ex) {
@@ -304,24 +310,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void tfInputKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfInputKeyReleased
         lbError.setText(null);
     }//GEN-LAST:event_tfInputKeyReleased
-    private void assignedValues(FormulaData[] data) {
-        for (int i = 0; i < data.length; i++) {
-            if (data[i].getPriority() == FormulaData.VALUE_PRIORITY) {
-                if (data[i].getData().matches(("[A-Z]*"))) {
-                    String temp = data[i].getData();
-                    data[i].setData(assignedValue.showMessageDialog(this, data[i].getData()));
-                    for (int j = i; j < data.length; j++) {
-                        if (data[i].getPriority() == FormulaData.VALUE_PRIORITY) {
-                            if (data[j].getData().equals(temp)) {
-                                data[j].setData(data[i].getData());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
+    
     private Queue transformData(String formula) {
         FormulaData[] data = new FormulaData[formula.length()];
         final String[] FUNCTIONS_TEXT = {"cos", "sen", "tan", "sqrt"};
@@ -332,13 +321,19 @@ public class MainFrame extends javax.swing.JFrame {
                 case 'c':
                 case 's':
                 case 't':
-                    temp = formula.substring(i, i + 5);
-                    for (int j = 0; j < FUNCTIONS_TEXT.length; j++) {
-                        if (temp.contains(FUNCTIONS_TEXT[j])) {
-                            data[i] = new FormulaData(FUNCTIONS_TEXT[j]);
-                            i += FUNCTIONS_TEXT[j].length() - 1;
-                            break;
+                    if (i + 5 < formula.length()) {
+                        temp = formula.substring(i, i + 5);
+                        for (int j = 0; j < FUNCTIONS_TEXT.length; j++) {
+                            if (temp.contains(FUNCTIONS_TEXT[j])) {
+                                data[i] = new FormulaData(FUNCTIONS_TEXT[j]);
+                                i += FUNCTIONS_TEXT[j].length() - 1;
+                                break;
+                            } else if (i == FUNCTIONS_TEXT.length - 1) {
+                                data[i] = new FormulaData(Character.toString(temp.charAt(0)));
+                            }
                         }
+                    } else {
+                        data[i] = new FormulaData(Character.toString(formula.charAt(i)));
                     }
                     break;
                 case '^':
